@@ -1,0 +1,16 @@
+[0;1;31m●[0m apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Sat 2024-03-30 16:05:18 CET; 51s ago
+       Docs: https://httpd.apache.org/docs/2.4/
+    Process: 73291 ExecStart=/usr/sbin/apachectl start [0;1;31m(code=exited, status=1/FAILURE)[0m
+
+Mar 30 16:05:18 dev.dispora.com systemd[1]: Starting The Apache HTTP Server...
+Mar 30 16:05:18 dev.dispora.com apachectl[73302]: [Sat Mar 30 16:05:18.326095 2024] [core:warn] [pid 73302] AH00111: Config variable ${APACHE+LOG_DIR} is not defined
+Mar 30 16:05:18 dev.dispora.com apachectl[73302]: AH00526: Syntax error on line 14 of /etc/apache2/sites-enabled/sidorav2.conf:
+Mar 30 16:05:18 dev.dispora.com apachectl[73302]: Invalid command 'CusomLog', perhaps misspelled or defined by a module not included in the server configuration
+Mar 30 16:05:18 dev.dispora.com apachectl[73291]: Action 'start' failed.
+Mar 30 16:05:18 dev.dispora.com apachectl[73291]: The Apache error log may have more information.
+Mar 30 16:05:18 dev.dispora.com systemd[1]: [0;1;39m[0;1;31m[0;1;39mapache2.service: Control process exited, code=exited, status=1/FAILURE[0m
+Mar 30 16:05:18 dev.dispora.com systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mapache2.service: Failed with result 'exit-code'.[0m
+Mar 30 16:05:18 dev.dispora.com systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start The Apache HTTP Server.[0m
+Mar 30 16:05:43 dev.dispora.com systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mapache2.service: Unit cannot be reloaded because it is inactive.[0m

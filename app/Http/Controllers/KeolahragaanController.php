@@ -1,0 +1,494 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use App\Exports\KeolahragaanExport;
+use Maatwebsite\Excel\Facades\Excel;
+use DB;
+use Auth;
+
+class KeolahragaanController extends Controller
+{
+    public function index() {
+        $desaKelurahan = DB::table('m_desa_kelurahan as desa_kelurahan')
+                        ->select(
+                            'desa_kelurahan.id',
+                            'desa_kelurahan.nama as desa_kelurahan',
+                            'kecamatan.nama as kecamatan'
+                        )
+                        ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desa_kelurahan.kecamatan_id')
+                        ->get();
+
+        $data = DB::table('m_desa_kelurahan AS dk')
+                    ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('COUNT(id)')
+                            ->from('t_sarana')
+                            ->whereColumn('desa_kel_id', 'dk.id');
+                    }, 'jumlah_sarana')
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('COUNT(id)')
+                            ->from('t_kegiatan_olahraga')
+                            ->whereColumn('desa_kel_id', 'dk.id');
+                    }, 'jumlah_kegiatan_olahraga')
+                    ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id')
+                    ->paginate(10);
+
+        return view('transaksi.keolahragaan.index', compact('desaKelurahan', 'data'));
+    }
+
+    public function getLists(Request $request) {
+        $params = $request->all();
+
+        $search = $request->input('custom_search');
+
+        $query = DB::table('m_desa_kelurahan AS dk')
+            ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
+            ->selectSub(function ($query) {
+                $query->selectRaw('COUNT(id)')
+                    ->from('t_sarana')
+                    ->whereColumn('desa_kel_id', 'dk.id');
+            }, 'jumlah_sarana')
+            ->selectSub(function ($query) {
+                $query->selectRaw('COUNT(id)')
+                    ->from('t_kegiatan_olahraga')
+                    ->whereColumn('desa_kel_id', 'dk.id');
+            }, 'jumlah_kegiatan_olahraga')
+            ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id');
+
+        if (!empty($search)) {
+            $query->where(function($query) use ($search) {
+                $query->where('kecamatan.nama', 'like', "%$search%")
+                        ->orWhere('dk.nama', 'like', "%$search%");
+            });
+        }
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $totalRecords = $query->count();
+        $filteredRecords = $query->count();
+        $data = $query->orderBy('kecamatan.nama', 'asc')->orderBy('dk.nama', 'asc')->skip($start)->take($length)->get();
+
+        $response = [
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ];
+
+        return response()->json($response);
+    }
+
+    public function create(Request $request) {
+
+        $kecamatan = $request->kecamatan;
+        $desaKelurahan = $request->desa_kelurahan;
+        $tahun = $request->tahun;
+        $sarana = DB::table('m_sarana')->get();
+
+        return view('transaksi.keolahragaan.forms.sarana', compact('sarana', 'kecamatan', 'desaKelurahan', 'tahun'));
+    }
+
+    public function save(Request $request) {
+
+        $sarana = $request->sarana;
+        $prasarana = $request->prasarana;
+        $kegiatanOlahraga = $request->kegiatan_olahraga;
+
+        try {
+            DB::beginTransaction();
+            foreach($sarana as $s) {
+                DB::table('t_sarana')->insert([
+                    "desa_kel_id" => $request->desa_kelurahan_code,
+                    "sarana_id" => $s['sarana_code'],
+                    "tipe_sarana" => $s['tipe_sarana_code'],
+                    "status_kepemilikan" => $s['status_kepemilikan_code'],
+                    "nama_pemilik" => $s['nama_pemilik'],
+                    "ukuran" => $s['ukuran'],
+                    "status_kondisi" => $s['status_kondisi_code'],
+                    "foto_lokasi_1" => "",
+                    "foto_lokasi_2" => "",
+                    "foto_lokasi_3" => "",
+                    "foto_lokasi_4" => "",
+                    "alamat" => $s['alamat'],
+                    "lat" => $s['latitude'],
+                    "long" => $s['longitude'],
+                    "tahun" => $request->tahun,
+                    "created_at" => date('Y-m-d H:i:s'),
+                    "created_by" => Auth::user()->name,
+                ]);
+            }
+
+            foreach($prasarana as $p) {
+                DB::table('t_prasarana')->insert([
+                    "desa_kel_id" => $request->desa_kelurahan_code,
+                    "prasarana_id" => $p['prasarana_code'],
+                    "jumlah" => $p['jumlah'],
+                    "status_layak" => $p['status_layak_code'],
+                    "tahun" => $p['tahun'],
+                    "lampiran" => "",
+                    "created_at" => date('Y-m-d H:i:s'),
+                    "created_by" => Auth::user()->name,
+                ]);
+            }
+
+            foreach($kegiatanOlahraga as $ko) {
+                DB::table('t_kegiatan_olahraga')->insert([
+                    "desa_kel_id" => $request->desa_kelurahan_code,
+                    "cabang_olahraga_id" => $ko['cabang_olahraga_code'],
+                    "nama_kelompok" => $ko['nama_kelompok'],
+                    "nama_ketua_kelompok" => $ko['nama_ketua_kelompok'],
+                    "jumlah_anggota" => $ko['jumlah_anggota'],
+                    "terverifikasi" => $ko['terverifikasi_code'],
+                    "nomor_sk" => $ko['nomor_sk'],
+                    "alamat_sekretariat" => $ko['alamat_sekretariat'],
+                    "tahun" => $request->tahun,
+                    "created_at" => date('Y-m-d H:i:s'),
+                    "created_by" => Auth::user()->name,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'Data saved successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function saveSarana(Request $request) {
+
+        $file_att_base64 = "";
+
+        if ($request->hasFile('foto_lokasi_1')) {
+            $file_att = $request->file('foto_lokasi_1');
+            $file_mime_type = $file_att->getMimeType();
+            $file_att_base64 = base64_encode(file_get_contents($file_att));
+        }
+
+        DB::table('t_sarana')->insert([
+            "desa_kel_id" => $request->des_kel_id,
+            "sarana_id" => $request->sarana_id,
+            "tipe_sarana" => $request->tipe_sarana,
+            "status_kepemilikan" => $request->status_kepemilikan,
+            "nama_pemilik" => $request->nama_pemilik,
+            "ukuran" => $request->ukuran,
+            "status_kondisi" => $request->status_kondisi,
+            "foto_lokasi_1" => $file_att_base64,
+            "foto_lokasi_2" => "",
+            "foto_lokasi_3" => "",
+            "foto_lokasi_4" => "",
+            "alamat" => $request->alamat,
+            "lat" => $request->latitude,
+            "long" => $request->longitude,
+            "tahun" => $request->tahun,
+            "created_at" => date('Y-m-d H:i:s'),
+            "created_by" => Auth::user()->name,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function savePrasarana(Request $request) {
+
+        DB::table('t_prasarana')->insert([
+            "desa_kel_id" => $request->des_kel_id,
+            "prasarana_id" => $request->prasarana_id,
+            "jumlah" => $request->jumlah,
+            "hibah_pemerintah" => $request->hibah_pemerintah,
+            "status_layak" => $request->status_layak,
+            "tahun" => $request->tahun,
+            "lampiran" => "",
+            "created_at" => date('Y-m-d H:i:s'),
+            "created_by" => Auth::user()->name,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function saveKegiatanOlahraga(Request $request) {
+        // dd($request->all());
+        DB::table('t_kegiatan_olahraga')->insert([
+            "desa_kel_id" => $request->des_kel_id,
+            "cabang_olahraga_id" => $request->cabang_olahraga_id,
+            "nama_kelompok" => $request->nama_kelompok,
+            "nama_ketua_kelompok" => $request->nama_ketua_kelompok,
+            "jumlah_anggota" => $request->jumlah_anggota,
+            "terverifikasi" => $request->terverifikasi,
+            "nomor_sk" => $request->nomor_sk,
+            "alamat_sekretariat" => $request->alamat_sekretariat,
+            "tahun" => $request->tahun,
+            "created_at" => date('Y-m-d H:i:s'),
+            "created_by" => Auth::user()->name,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function savePrestasiOlahraga(Request $request) {
+
+        return redirect()->back();
+    }
+
+    public function detail($id) {
+        $wilayah = DB::table('m_kecamatan as kecamatan')
+                    ->select('desa_kelurahan.id', 'kecamatan.nama as nama_kecamatan', 'desa_kelurahan.nama as nama_desa_kelurahan')
+                    ->join('m_desa_kelurahan as desa_kelurahan', 'desa_kelurahan.kecamatan_id', '=', 'kecamatan.id')
+                    ->where('desa_kelurahan.id', $id)
+                    ->first();
+        $infrastruktur = DB::table('m_sarana')->get();
+        $mPrasarana = DB::table('m_prasarana')->get();
+        $cabangOlahraga = DB::table('m_cabang_olahraga')->get();
+
+        $tSarana = DB::table('t_sarana as tSarana')
+                ->select(
+                    'tSarana.*',
+                    'mSarana.nama',
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.tipe_sarana = '1' THEN 'Indoor' ELSE 'Outdoor'
+                        END AS str_tipe_sarana"
+                    ),
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.status_kepemilikan = '1' THEN 'Pribadi' ELSE 'Pemerintah'
+                        END AS str_status_kepemilikan"
+                    ),
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.status_kondisi = '1' THEN 'Layak Pakai' ELSE 'Tidak Layak Pakai'
+                        END AS str_status_kondisi"
+                    )
+                )
+                ->leftJoin('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
+                ->where('tSarana.desa_kel_id', $id)
+                ->get();
+
+        $tPrasarana = DB::table('t_prasarana as tPrasarana')
+                ->select(
+                    'tPrasarana.*',
+                    'mPrasrana.nama',
+                    'mPrasrana.satuan',
+                    DB::raw("
+                        CASE
+                            WHEN tPrasarana.status_layak = '1' THEN 'Ya' ELSE 'Tidak'
+                        END AS str_status_layak"
+                    ),
+                    DB::raw("
+                        CASE
+                            WHEN tPrasarana.hibah_pemerintah = '1' THEN 'Ya' ELSE 'Tidak'
+                        END AS hibah_pemerintah"
+                    )
+                )
+                ->leftJoin('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
+                ->where('tPrasarana.desa_kel_id', $id)
+                ->get();
+
+        $tKegiatanOlahraga = DB::table('t_kegiatan_olahraga as tKegiatanOlahraga')
+                ->select(
+                    'tKegiatanOlahraga.*',
+                    'mCabor.nama',
+                    DB::raw("
+                        CASE
+                            WHEN tKegiatanOlahraga.terverifikasi = '1' THEN 'Ya' ELSE 'Tidak'
+                        END AS str_terverifikasi"
+                    )
+                )
+                ->leftJoin('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
+                ->where('tKegiatanOlahraga.desa_kel_id', $id)
+                ->get();
+
+        return view('transaksi.keolahragaan.detail', compact('wilayah', 'tSarana', 'tPrasarana', 'tKegiatanOlahraga', 'infrastruktur', 'mPrasarana', 'cabangOlahraga'));
+    }
+
+    public function export($id) {
+        $informasiWilayah = DB::table('m_desa_kelurahan AS dk')
+                    ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('COUNT(id)')
+                            ->from('t_sarana')
+                            ->whereColumn('desa_kel_id', 'dk.id');
+                    }, 'jumlah_sarana')
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('COUNT(id)')
+                            ->from('t_kegiatan_olahraga')
+                            ->whereColumn('desa_kel_id', 'dk.id');
+                    }, 'jumlah_kegiatan_olahraga')
+                    ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id')
+                    ->where('dk.id', $id)
+                    ->get();
+
+        $sarana = DB::table('t_sarana as tSarana')
+                    ->select(
+                        'tSarana.*',
+                        'mSarana.nama',
+                        DB::raw("
+                            CASE
+                                WHEN tSarana.tipe_sarana = '1' THEN 'Indoor' ELSE 'Outdoor'
+                            END AS str_tipe_sarana"
+                        ),
+                        DB::raw("
+                            CASE
+                                WHEN tSarana.status_kepemilikan = '1' THEN 'Milik Pribadi' ELSE 'Pemerintah'
+                            END AS str_status_kepemilikan"
+                        ),
+                        DB::raw("
+                            CASE
+                                WHEN tSarana.status_kondisi = '1' THEN 'Layak Pakai' ELSE 'Tidak Layak Pakai'
+                            END AS str_status_kondisi"
+                        )
+                    )
+                    ->join('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
+                    ->where('tSarana.desa_kel_id', $id)
+                    ->get();
+
+        $prasarana = DB::table('t_prasarana as tPrasarana')
+                    ->select(
+                        'tPrasarana.*',
+                        'mPrasrana.nama',
+                        DB::raw("
+                            CASE
+                                WHEN tPrasarana.status_layak = '1' THEN 'Ya' ELSE 'Tidak'
+                            END AS str_status_layak"
+                        )
+                    )
+                    ->join('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
+                    ->where('tPrasarana.desa_kel_id', $id)
+                    ->get();
+
+        $kegiatanOlahraga = DB::table('t_kegiatan_olahraga as tKegiatanOlahraga')
+                    ->select(
+                        'tKegiatanOlahraga.*',
+                        'mCabor.nama',
+                        DB::raw("
+                            CASE
+                                WHEN tKegiatanOlahraga.terverifikasi = '1' THEN 'Ya' ELSE 'Tidak'
+                            END AS str_terverifikasi"
+                        )
+                    )
+                    ->join('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
+                    ->where('tKegiatanOlahraga.desa_kel_id', $id)
+                    ->get();
+
+        return Excel::download(new KeolahragaanExport($informasiWilayah, $sarana, $prasarana, $kegiatanOlahraga), 'Laporan.xlsx');
+    }
+
+    public function getSaranaById(Request $request) {
+        $data = DB::table('t_sarana')->where('id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function getPrasaranaById(Request $request) {
+        $data = DB::table('t_prasarana')->where('id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function getKegiatanOlahragaById(Request $request) {
+        $data = DB::table('t_kegiatan_olahraga')->where('id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function getPrestasiOlahragaById(Request $request) {
+
+    }
+
+    public function getImageBySaranaId(Request $request) {
+
+        $data = DB::table('t_sarana')->select('foto_lokasi_1')->where('id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function updateSarana(Request $request) {
+
+        $file_att_base64 = "";
+
+        if ($request->hasFile('foto_lokasi_1')) {
+            $file_att = $request->file('foto_lokasi_1');
+            $file_mime_type = $file_att->getMimeType();
+            $file_att_base64 = base64_encode(file_get_contents($file_att));
+        } else {
+            $file_att_base64 = $request->ex_foto_lokasi_1;
+        }
+
+        DB::table('t_sarana')->where('id',$request->id)->update([
+            "sarana_id" => $request->sarana_id,
+            "tipe_sarana" => $request->tipe_sarana,
+            "status_kepemilikan" => $request->status_kepemilikan,
+            "nama_pemilik" => $request->nama_pemilik,
+            "ukuran" => $request->ukuran,
+            "status_kondisi" => $request->status_kondisi,
+            "foto_lokasi_1" => $file_att_base64,
+            "alamat" => $request->alamat,
+            "lat" => $request->latitude,
+            "long" => $request->longitude,
+            "tahun" => $request->tahun
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function updatePrasarana(Request $request) {
+
+        DB::table('t_prasarana')->where('id',$request->id)->update([
+            "prasarana_id" => $request->prasarana_id,
+            "jumlah" => $request->jumlah,
+            "hibah_pemerintah" => $request->hibah_pemerintah,
+            "status_layak" => $request->status_layak,
+            "tahun" => $request->tahun,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function updateKegiatanOlahraga(Request $request) {
+
+        DB::table('t_kegiatan_olahraga')->where('id',$request->id)->update([
+            "cabang_olahraga_id" => $request->cabang_olahraga_id,
+            "nama_kelompok" => $request->nama_kelompok,
+            "nama_ketua_kelompok" => $request->nama_ketua_kelompok,
+            "jumlah_anggota" => $request->jumlah_anggota,
+            "terverifikasi" => $request->terverifikasi,
+            "nomor_sk" => $request->nomor_sk,
+            "alamat_sekretariat" => $request->alamat_sekretariat,
+            "tahun" => $request->tahun,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function deleteSarana($id) {
+        DB::table('t_sarana')->where('id', $id)->delete();
+        return redirect()->back();
+    }
+
+    public function deletePrasarana($id) {
+        DB::table('t_prasarana')->where('id', $id)->delete();
+        return redirect()->back();
+    }
+
+    public function deleteKegiatanOlahraga($id) {
+        DB::table('t_kegiatan_olahraga')->where('id', $id)->delete();
+        return redirect()->back();
+    }
+
+    public function deletePrestasiOlahraga($id) {
+        DB::table('t_prestasi_olahraga')->where('id', $id)->delete();
+        return redirect()->back();
+    }
+}
