@@ -165,27 +165,24 @@ $(document).ready(function() {
     renderChart(categories = [], data = []);
 
     $("#slc-kecamatan").change(function() {
-        var kecamatan_id = $(this).val();
+        ar kecamatan_id = $(this).val();
         $.ajax({
-            url: `https://sidora.bandungkab.go.id/api/v1/infrastruktur-olahraga/get-fasilitas-per-desa-kelurahan-filter-by-kecamatan/?kecamatan_id=${kecamatan_id}`,
+            url: "{{ route('get-fasilitas-per-desa-kelurahan-filter-by-kecamatan') }}",
             method: 'GET',
+            data: { kecamatan_id: kecamatan_id }, // Include data in the request
             dataType: 'json',
-            xhrFields: {
-                withCredentials: true
+            success: function(response) {
+                // Handle the response data
+                var categories = response.data.map(item => item.nama_sarana);
+                var data = response.data.map(item => item.jumlah);
+
+                renderChart(categories, data);
             },
-                success: function(response) {
-                    // Handle the response data
-                    var categories = response.data.map(item => item.nama_sarana);
-                    var data = response.data.map(item => item.jumlah);
-
-                    renderChart(categories, data);
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    console.error(status, error);
-                }
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(status, error);
+            }
         });
-
     });
 
     $.ajax({
