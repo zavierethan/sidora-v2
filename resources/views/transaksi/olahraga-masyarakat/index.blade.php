@@ -213,7 +213,7 @@
                 searching: false,
                 lengthChange: false,
                 paging: true,
-                pageLength: 20,
+                pageLength: 10,
                 ajax: {
                     url: `/transaksi/olahraga-masyarakat/get-lists`,
                     type: 'GET',
