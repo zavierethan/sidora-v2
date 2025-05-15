@@ -51,6 +51,7 @@ class OlahragaMasyarakatController extends Controller
                 'prestasiKeolahragaan.id',
                 'prestasiKeolahragaan.nama',
                 'prestasiKeolahragaan.tempat_lahir',
+                'prestasiKeolahragaan.jenis_kelamin',
                 DB::raw("DATE_FORMAT(prestasiKeolahragaan.tanggal_lahir, '%d/%m/%Y') as tanggal_lahir"),
                 'prestasiKeolahragaan.alamat_lengkap',
                 'prestasiKeolahragaan.organisasi_pembina',

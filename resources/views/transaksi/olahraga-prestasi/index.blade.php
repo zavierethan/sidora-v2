@@ -31,6 +31,7 @@
                         <th class="whitespace-nowrap">Nama</th>
                         <th class="whitespace-nowrap">Tempat Lahir</th>
                         <th class="whitespace-nowrap">Tanggal Lahir</th>
+                        <th class="whitespace-nowrap">Jenis Kelamin</th>
                         <th class="whitespace-nowrap">Alamat</th>
                         <th class="whitespace-nowrap">Kategori</th>
                         <th class="whitespace-nowrap">Organisasi Pembina</th>
@@ -69,6 +70,14 @@
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Tanggal Lahir</label>
                                     <input type="date" class="form-control" name="tanggal_lahir" id="tanggal-lahir">
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Jenis Kelamin</label>
+                                    <select data-placeholder="Pilih Jenis Kelamin" class="tom-select w-full form-control" id="jenis-kelamin" name="jenis_kelamin" required>
+                                        <option value=" "> - </option>
+                                        <option value="L">L</option>
+                                        <option value="P">P</option>
+                                    </select>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Desa / Kelurahan</label>
@@ -162,6 +171,7 @@
                 nama: $("#nama").val(),
                 tempat_lahir: $("#tempat-lahir").val(),
                 tanggal_lahir: $("#tanggal-lahir").val(),
+                jenis_kelamin: $("#jenis-kelamin").val(),
                 desa_kelurahan_code: $("#desa-kelurahan").val(),
                 desa_kelurahan_desc: $("#desa-kelurahan").find('option:selected').text(),
                 alamat_lengkap: $("#alamat-lengkap").val(),
@@ -206,6 +216,7 @@
                 { data: 'nama', name: 'nama' },
                 { data: 'tempat_lahir', name: 'tempat_lahir' },
                 { data: 'tanggal_lahir', name: 'tanggal_lahir'},
+                { data: 'jenis_kelamin', name: 'jenis_kelamin'},
                 { data: 'alamat_lengkap', name: 'alamat_lengkap'},
                 { data: 'str_kategori', name: 'str_kategori'},
                 { data: 'organisasi_pembina', name: 'organisasi_pembina'},

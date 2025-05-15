@@ -27,6 +27,14 @@
                         <input type="date" class="form-control" name="tanggal_lahir" id="tanggal-lahir" value="{{$prestasiKeolahragaan->tanggal_lahir}}">
                     </div>
                     <div class="form-inline mt-5">
+                        <label for="input-wizard-2" class="sm:w-40 font-bold">Jenis Kelamin</label>
+                        <select data-placeholder="Pilih Jenis Kelamin" class="tom-select w-full form-control" id="jenis-kelamin" name="jenis_kelamin" required>
+                            <option value=" "> - </option>
+                            <option value="L" <?php echo ($prestasiKeolahragaan->jenis_kelamin == 'L') ? 'selected' : '';?>>L</option>
+                            <option value="P" <?php echo ($prestasiKeolahragaan->jenis_kelamin == 'P') ? 'selected' : '';?>>P</option>
+                        </select>
+                    </div>
+                    <div class="form-inline mt-5">
                         <label for="input-wizard-2" class="sm:w-40 font-bold">Desa / Kelurahan</label>
                         <select data-placeholder="Pilih Desa / Kelurahan" class="tom-select w-full form-control" id="desa-kelurahan" name="desa_kelurahan" required>
                             @foreach($desaKelurahan as $deskel)

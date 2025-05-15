@@ -107,7 +107,7 @@ $(document).ready(function () {
         searching: false,
         lengthChange: false,
         paging: true, // Enable pagination
-        pageLength: 20, // Number of rows per page
+        pageLength: 10, // Number of rows per page
         ajax: {
             url: `/transaksi/pengaturan/users/get-lists`, // Replace with your route
             type: 'GET',
