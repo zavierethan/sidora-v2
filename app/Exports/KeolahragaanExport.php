@@ -5,6 +5,10 @@ namespace App\Exports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use App\Exports\Sheets\InformasiWilayahSheet;
+use App\Exports\Sheets\SaranaSheet;
+use App\Exports\Sheets\PrasaranaSheet;
+use App\Exports\Sheets\KegiatanOlahragaSheet;
 
 class KeolahragaanExport implements WithMultipleSheets
 {
@@ -23,13 +27,11 @@ class KeolahragaanExport implements WithMultipleSheets
 
     public function sheets(): array
     {
-        $worksheet = new Worksheet();
-        
         return [
-            'Data' => new KeolahragaanExport($this->informasiWilayah, $worksheet),
-            'Sarana' => new KeolahragaanExport($this->sarana, $worksheet),
-            'Prasarana' => new KeolahragaanExport($this->prasrana, $worksheet),
-            'KegiatanOlahraga' => new KeolahragaanExport($this->kegiatanOlahraga, $worksheet),
+            new InformasiWilayahSheet($this->informasiWilayah),
+            new SaranaSheet($this->sarana),
+            new PrasaranaSheet($this->prasarana),
+            new KegiatanOlahragaSheet($this->kegiatanOlahraga),
         ];
     }
 }

@@ -160,8 +160,8 @@
                             <div class="flex justify-center items-center">
                                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Detail </a>
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href=""> <i
-                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Export PDF </a>
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
+                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Export</a>
                             </div>
                         `;
                     }

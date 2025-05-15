@@ -307,7 +307,7 @@ class KeolahragaanController extends Controller
 
     public function export($id) {
         $informasiWilayah = DB::table('m_desa_kelurahan AS dk')
-                    ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
+                    ->select('dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
                     ->selectSub(function ($query) {
                         $query->selectRaw('COUNT(id)')
                             ->from('t_sarana')
