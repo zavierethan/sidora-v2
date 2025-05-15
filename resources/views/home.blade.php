@@ -19,11 +19,6 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <i data-lucide="user" class="report-box__icon text-primary"></i>
-                                        <div class="ml-auto">
-                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"
-                                                title="33% Higher than last month"> 33% <i data-lucide="chevron-up"
-                                                    class="w-4 h-4 ml-0.5"></i> </div>
-                                        </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6" id="infrastruktur-keolahragaan">0
                                     </div>
@@ -36,11 +31,6 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <i data-lucide="user" class="report-box__icon text-warning"></i>
-                                        <div class="ml-auto">
-                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"
-                                                title="12% Higher than last month"> 12% <i data-lucide="chevron-up"
-                                                    class="w-4 h-4 ml-0.5"></i> </div>
-                                        </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6" id="kelompok-olahraga">0</div>
                                     <div class="text-base text-slate-500 mt-1">Kelompok Olahraga</div>
@@ -52,11 +42,6 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <i data-lucide="user" class="report-box__icon text-success"></i>
-                                        <div class="ml-auto">
-                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"
-                                                title="22% Higher than last month"> 22% <i data-lucide="chevron-up"
-                                                    class="w-4 h-4 ml-0.5"></i> </div>
-                                        </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6" id="prestasi-atlet">0</div>
                                     <div class="text-base text-slate-500 mt-1">Prestasi Atlet</div>
@@ -67,61 +52,61 @@
                 </div>
 
                 <div class="col-span-12 mt-8">
-  <div class="intro-y flex items-center h-10">
-    <h2 class="text-lg font-medium truncate mr-5">Olahraga Prestasi</h2>
-    <a href="#" class="ml-auto flex items-center text-primary">
-      <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2"></i> Reload Data
-    </a>
-  </div>
+                    <div class="intro-y flex items-center h-10">
+                        <h2 class="text-lg font-medium truncate mr-5">Olahraga Prestasi</h2>
+                        <a href="#" class="ml-auto flex items-center text-primary">
+                            <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2"></i> Reload Data
+                        </a>
+                    </div>
 
-  <div class="grid grid-cols-12 gap-6 mt-5">
-    <!-- KONI -->
-    <div class="col-span-12 sm:col-span-6 intro-y">
-      <div class="report-box zoom-in">
-        <div class="box p-5">
-          <h5 class="text-lg font-semibold text-center mb-6">KONI</h5>
-          <div class="flex justify-between text-center">
-            <div class="flex-1">
-              <h3 id="koni-pelatih" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Pelatih</p>
-            </div>
-            <div class="flex-1">
-              <h3 id="koni-atlet" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Atlet</p>
-            </div>
-            <div class="flex-1">
-              <h3 id="koni-wasit" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                    <div class="grid grid-cols-12 gap-6 mt-5">
+                        <!-- KONI -->
+                        <div class="col-span-12 sm:col-span-6 intro-y">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <h5 class="text-lg font-semibold text-center mb-6">KONI</h5>
+                                    <div class="flex justify-between text-center">
+                                        <div class="flex-1">
+                                            <h3 id="koni-pelatih" class="text-2xl font-bold text-gray-800" id="koni-pelatih">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Pelatih</p>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 id="koni-atlet" class="text-2xl font-bold text-gray-800" id="koni-atlet">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Atlet</p>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 id="koni-wasit" class="text-2xl font-bold text-gray-800" id="koni-wasit">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- NPCI -->
-    <div class="col-span-12 sm:col-span-6 intro-y">
-      <div class="report-box zoom-in">
-        <div class="box p-5">
-          <h5 class="text-lg font-semibold text-center mb-6">NPCI</h5>
-          <div class="flex justify-between text-center">
-            <div class="flex-1">
-              <h3 id="npci-pelatih" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Pelatih</p>
-            </div>
-            <div class="flex-1">
-              <h3 id="npci-atlet" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Atlet</p>
-            </div>
-            <div class="flex-1">
-              <h3 id="npci-wasit" class="text-2xl font-bold text-gray-800">0</h3>
-              <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                        <!-- NPCI -->
+                        <div class="col-span-12 sm:col-span-6 intro-y">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <h5 class="text-lg font-semibold text-center mb-6">NPCI</h5>
+                                    <div class="flex justify-between text-center">
+                                        <div class="flex-1">
+                                            <h3 id="npci-pelatih" class="text-2xl font-bold text-gray-800" id="koni-pelatih">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Pelatih</p>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 id="npci-atlet" class="text-2xl font-bold text-gray-800" id="koni-atlet">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Atlet</p>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 id="npci-wasit" class="text-2xl font-bold text-gray-800" id="koni-wasit">0</h3>
+                                            <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 <div class="col-span-12 mt-8">
@@ -138,11 +123,6 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <i data-lucide="user" class="report-box__icon text-primary"></i>
-                                        <div class="ml-auto">
-                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"
-                                                title="33% Higher than last month"> 33% <i data-lucide="chevron-up"
-                                                    class="w-4 h-4 ml-0.5"></i> </div>
-                                        </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6" id="kormi-atlet">0</div>
                                     <div class="text-base text-slate-500 mt-1">Atlet</div>
@@ -154,11 +134,6 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <i data-lucide="user" class="report-box__icon text-pending"></i>
-                                        <div class="ml-auto">
-                                            <div class="report-box__indicator bg-danger tooltip cursor-pointer"
-                                                title="2% Lower than last month"> 2% <i data-lucide="chevron-down"
-                                                    class="w-4 h-4 ml-0.5"></i> </div>
-                                        </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6" id="kormi-pelatih">0</div>
                                     <div class="text-base text-slate-500 mt-1">Pelatih</div>
@@ -283,6 +258,39 @@ $.ajax({
     success: function(response) {
         // Handle the response data
         $('#kelompok-olahraga').text(response.data.total_kelompok_olahraga);
+    },
+    error: function(xhr, status, error) {
+        // Handle errors
+        console.error(status, error);
+    }
+});
+
+$.ajax({
+    url: '/api/v1/olahraga-prestasi/get-summary-data-koni',
+    method: 'GET',
+    dataType: 'json',
+    success: function(response) {
+        // Handle the response data
+        console.log(response.data[0].jumlah_atlet)
+        $('#koni-atlet').text(response.data[0].jumlah_atlet);
+        $('#koni-pelatih').text(response.data[0].jumlah_pelatih);
+        $('#koni-wasit').text(response.data[0].jumlah_wasit);
+    },
+    error: function(xhr, status, error) {
+        // Handle errors
+        console.error(status, error);
+    }
+});
+
+$.ajax({
+    url: '/api/v1/olahraga-prestasi/get-summary-data-npci',
+    method: 'GET',
+    dataType: 'json',
+    success: function(response) {
+        // Handle the response data
+        $('#npci-atlet').text(response.data[0].jumlah_atlet);
+        $('#npci-pelatih').text(response.data[0].jumlah_pelatih);
+        $('#npci-wasit').text(response.data[0].jumlah_wasit);
     },
     error: function(xhr, status, error) {
         // Handle errors

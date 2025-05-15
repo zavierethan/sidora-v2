@@ -167,7 +167,7 @@ $(document).ready(function() {
     $("#slc-kecamatan").change(function() {
         var kecamatan_id = $(this).val();
         $.ajax({
-            url: `/api/v1/infrastruktur-olahraga/get-fasilitas-per-desa-kelurahan-filter-by-kecamatan/?kecamatan_id=${kecamatan_id}`,
+            url: `${window.location.origin}/api/v1/infrastruktur-olahraga/get-fasilitas-per-desa-kelurahan-filter-by-kecamatan/?kecamatan_id=${kecamatan_id}`,
             method: 'GET',
             dataType: 'json',
                 success: function(response) {
