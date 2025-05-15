@@ -77,8 +77,12 @@ $(document).ready(function () {
                     let elem = "";
 
                     if(row.status === 0) {
-                        elem = `<a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/pengaturan/registartions/approve/${row.id}"> <i
-                                        data-lucide="check" class="w-4 h-4 mr-1"></i> Approve Pendaftaran </a>`;
+                        elem = `<div class="flex justify-center items-center"><a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/pengaturan/registartions/approve/${row.id}"> <i
+                                        data-lucide="check" class="w-4 h-4 mr-1"></i> Approve Pendaftaran </a></div>`;
+                    }
+
+                    if(row.status === 1) {
+                        elem = `<div class="flex justify-center items-center"><a class="flex items-center text-success whitespace-nowrap mr-5" href=""> <i data-lucide="check" class="w-4 h-4 mr-1"></i> Approved</a></div>`;
                     }
 
                     return elem;

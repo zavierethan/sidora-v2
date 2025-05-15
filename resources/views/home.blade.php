@@ -67,62 +67,62 @@
                 </div>
 
                 <div class="col-span-12 mt-8">
-                    <div class="intro-y flex items-center h-10">
-                        <h2 class="text-lg font-medium truncate mr-5">
-                            Olahraga Prestasi
-                        </h2>
-                        <a href="" class="ml-auto flex items-center text-primary"> <i data-lucide="refresh-ccw"
-                                class="w-4 h-4 mr-3"></i> Reload Data </a>
-                    </div>
-                    <div class="grid grid-cols-12 gap-6 mt-5">
-                        <div class="col-span-12 sm:col-span-6 xl:col-span-6 intro-y">
-                            <div class="report-box zoom-in">
-                                <div class="box p-5">
-                                    <div class="p-2">
-                                        <h5>KONI</h5>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-atlet" class="text-center">0</h3>
-                                            <div class="p-2">Atlet</div>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-pelatih" class="text-center">0</h3>
-                                            <div class="p-2">Pelatih</div>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-wasit" class="text-center">0</h3>
-                                            <div class="p-2">Wasit - Juri</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6 xl:col-span-6 intro-y">
-                            <div class="report-box zoom-in">
-                                <div class="box p-5">
-                                    <div class="p-2">
-                                        <h5>NPCI</h5>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-atlet" class="text-center">0</h3>
-                                            <div class="p-2">Atlet</div>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-pelatih" class="text-center">0</h3>
-                                            <div class="p-2">Pelatih</div>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h3 id="koni-wasit" class="text-center">0</h3>
-                                            <div class="p-2">Wasit - Juri</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="intro-y flex items-center h-10">
+    <h2 class="text-lg font-medium truncate mr-5">Olahraga Prestasi</h2>
+    <a href="#" class="ml-auto flex items-center text-primary">
+      <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2"></i> Reload Data
+    </a>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6 mt-5">
+    <!-- KONI -->
+    <div class="col-span-12 sm:col-span-6 intro-y">
+      <div class="report-box zoom-in">
+        <div class="box p-5">
+          <h5 class="text-lg font-semibold text-center mb-6">KONI</h5>
+          <div class="flex justify-between text-center">
+            <div class="flex-1">
+              <h3 id="koni-pelatih" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Pelatih</p>
+            </div>
+            <div class="flex-1">
+              <h3 id="koni-atlet" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Atlet</p>
+            </div>
+            <div class="flex-1">
+              <h3 id="koni-wasit" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NPCI -->
+    <div class="col-span-12 sm:col-span-6 intro-y">
+      <div class="report-box zoom-in">
+        <div class="box p-5">
+          <h5 class="text-lg font-semibold text-center mb-6">NPCI</h5>
+          <div class="flex justify-between text-center">
+            <div class="flex-1">
+              <h3 id="npci-pelatih" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Pelatih</p>
+            </div>
+            <div class="flex-1">
+              <h3 id="npci-atlet" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Atlet</p>
+            </div>
+            <div class="flex-1">
+              <h3 id="npci-wasit" class="text-2xl font-bold text-gray-800">0</h3>
+              <p class="text-sm text-gray-600 mt-1">Wasit - Juri</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
                 <div class="col-span-12 mt-8">
                     <div class="intro-y flex items-center h-10">
