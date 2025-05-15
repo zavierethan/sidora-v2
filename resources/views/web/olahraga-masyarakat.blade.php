@@ -156,18 +156,18 @@ $(document).ready(function(){
     $("#slc-kecamatan").change(function() {
         var kecamatan_id = $(this).val();
         $.ajax({
-            url: `/api/v1/olahraga-masyarakat/get-data-olahraga-masyarakat-group-by-desa-kelurahan/?kecamatan_id=${kecamatan_id}`,
+            url: "{{ route('get-data-olahraga-masyarakat-group-by-desa-kelurahan') }}",
             method: 'GET',
+            data: { kecamatan_id: kecamatan_id },
             dataType: 'json',
-                success: function(response) {
-                    // Handle the response data
-
-                    renderChart(response);
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    console.error(status, error);
-                }
+            success: function(response) {
+                // Handle the response data
+                renderChart(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(status, error);
+            }
         });
     });
 

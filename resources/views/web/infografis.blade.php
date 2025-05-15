@@ -165,7 +165,7 @@ $(document).ready(function() {
     renderChart(categories = [], data = []);
 
     $("#slc-kecamatan").change(function() {
-        ar kecamatan_id = $(this).val();
+        var kecamatan_id = $(this).val();
         $.ajax({
             url: "{{ route('get-fasilitas-per-desa-kelurahan-filter-by-kecamatan') }}",
             method: 'GET',

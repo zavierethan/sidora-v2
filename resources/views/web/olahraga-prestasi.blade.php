@@ -154,7 +154,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 align-self-center mb-md-5 pb-md-5 wow fadeIn mb-3" data-wow-delay="0.3s">
-                
+
             </div>
         </div>
     </div>
@@ -194,17 +194,21 @@ $(document).ready(function(){
         var kecamatan_id = $("#kecamatan-id").val();
         var cabang_olahraga_id = $("#cabang-olahraga-id").val();
         $.ajax({
-            url: `/api/v1/olahraga-prestasi/get-data-olahraga-prestasi-group-by-desa-kelurahan/?kecamatan_id=${kecamatan_id}&cabang_olahraga_id=${cabang_olahraga_id}`,
+            url: "{{ route('get-data-olahraga-prestasi-group-by-desa-kelurahan') }}",
             method: 'GET',
+            data: {
+                kecamatan_id: kecamatan_id,
+                cabang_olahraga_id: cabang_olahraga_id
+            },
             dataType: 'json',
-                success: function(response) {
-                    // Handle the response data
-                    renderChart(response);
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    console.error(status, error);
-                }
+            success: function(response) {
+                // Handle the response data
+                renderChart(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(status, error);
+            }
         });
     });
 
