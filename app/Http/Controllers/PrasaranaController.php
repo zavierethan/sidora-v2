@@ -60,7 +60,8 @@ class PrasaranaController extends Controller
 
     public function update(Request $request) {
         DB::table('m_prasarana')->where('id', $request->id)->update([
-            "nama" => $request->nama
+            "nama" => $request->nama,
+            "satuan" => $request->satuan
         ]);
 
         return redirect()->route('master.prasarana.index');

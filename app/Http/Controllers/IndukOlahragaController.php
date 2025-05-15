@@ -62,7 +62,8 @@ class IndukOlahragaController extends Controller
 
     public function update(Request $request) {
         DB::table('m_induk_olahraga')->where('id', $request->id)->update([
-            "nama" => $request->nama
+            "nama" => $request->nama,
+            "nama" => $request->kategori
         ]);
 
         return redirect()->route('master.induk-olahraga.index');

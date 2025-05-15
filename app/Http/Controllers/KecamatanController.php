@@ -49,7 +49,10 @@ class KecamatanController extends Controller
 
     public function update(Request $request) {
         DB::table('m_kecamatan')->where('id', $request->id)->update([
-            "nama" => $request->nama
+            "kode" => $request->kode,
+            "nama" => $request->nama,
+            "latitude" => $request->latitude,
+            "longitude" => $request->longitude
         ]);
 
         return redirect()->route('master.kecamatan.index');
