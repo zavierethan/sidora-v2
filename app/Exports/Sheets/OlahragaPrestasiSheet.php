@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class SaranaSheet implements FromCollection, WithTitle, WithHeadings, WithStyles, WithEvents, ShouldAutoSize
+class OlahragaPrestasiSheet implements FromCollection, WithTitle, WithHeadings, WithStyles, WithEvents, ShouldAutoSize
 {
     protected $data;
 
@@ -29,25 +29,21 @@ class SaranaSheet implements FromCollection, WithTitle, WithHeadings, WithStyles
     public function headings(): array
     {
         return [
-            'Nama Sarana',
-            'Tipe Sarana',
-            'Satus Kepemilikan',
-            'Nama Pemilik',
-            'Ukuran',
-            'Status Kondisi',
-            'Latitude',
-            'Longitude',
+            'Nama Atlet',
+            'Tempat Lahir',
+            'Tanggal Lahir',
             'Alamat',
-            'Tahun',
+            'Kategori',
+            'Organisasi Pembina',
+            'Cabang Olahraga'
         ];
     }
 
     public function title(): string
     {
-        return 'Sarana';
+        return 'Olahraga Prestasi';
     }
 
-    // Membuat header bold dan grey
     public function styles(Worksheet $sheet)
     {
         return [
@@ -58,7 +54,6 @@ class SaranaSheet implements FromCollection, WithTitle, WithHeadings, WithStyles
         ];
     }
 
-    // Menambahkan border ke semua sel berdasarkan jumlah baris & kolom
     public function registerEvents(): array
     {
         return [
@@ -67,7 +62,7 @@ class SaranaSheet implements FromCollection, WithTitle, WithHeadings, WithStyles
                 $columnCount = count($this->headings());
 
                 $lastColumnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnCount);
-                $lastRow = $dataRowCount + 1; // +1 karena header
+                $lastRow = $dataRowCount + 1;
 
                 $cellRange = "A1:{$lastColumnLetter}{$lastRow}";
 

@@ -48,7 +48,12 @@ class OlahragaMasyarakatController extends Controller
 
         $query = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
             ->select(
-                'prestasiKeolahragaan.*',
+                'prestasiKeolahragaan.id',
+                'prestasiKeolahragaan.nama',
+                'prestasiKeolahragaan.tempat_lahir',
+                DB::raw("DATE_FORMAT(prestasiKeolahragaan.tanggal_lahir, '%d/%m/%Y') as tanggal_lahir"),
+                'prestasiKeolahragaan.alamat_lengkap',
+                'prestasiKeolahragaan.organisasi_pembina',
                 'desakelurahan.nama as nama_desa_kelurahan',
                 'indukOlahraga.nama as nama_induk_olahraga',
                 DB::raw("

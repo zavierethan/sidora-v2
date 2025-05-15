@@ -246,7 +246,7 @@ class KeolahragaanController extends Controller
 
         $tSarana = DB::table('t_sarana as tSarana')
                 ->select(
-                    'tSarana.*',
+                    'tSarana.id',
                     'mSarana.nama',
                     DB::raw("
                         CASE
@@ -258,6 +258,13 @@ class KeolahragaanController extends Controller
                             WHEN tSarana.status_kepemilikan = '1' THEN 'Pribadi' ELSE 'Pemerintah'
                         END AS str_status_kepemilikan"
                     ),
+                    'tSarana.nama_pemilik',
+                    'tSarana.ukuran',
+                    'tSarana.lat',
+                    'tSarana.long',
+                    'tSarana.alamat',
+                    'tSarana.tahun',
+                    'tSarana.foto_lokasi_1',
                     DB::raw("
                         CASE
                             WHEN tSarana.status_kondisi = '1' THEN 'Layak Pakai' ELSE 'Tidak Layak Pakai'
@@ -270,8 +277,9 @@ class KeolahragaanController extends Controller
 
         $tPrasarana = DB::table('t_prasarana as tPrasarana')
                 ->select(
-                    'tPrasarana.*',
+                    'tPrasarana.id',
                     'mPrasrana.nama',
+                    'tPrasarana.jumlah',
                     'mPrasrana.satuan',
                     DB::raw("
                         CASE
@@ -282,7 +290,8 @@ class KeolahragaanController extends Controller
                         CASE
                             WHEN tPrasarana.hibah_pemerintah = '1' THEN 'Ya' ELSE 'Tidak'
                         END AS hibah_pemerintah"
-                    )
+                    ),
+                    'tPrasarana.tahun'
                 )
                 ->leftJoin('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
                 ->where('tPrasarana.desa_kel_id', $id)
@@ -290,13 +299,18 @@ class KeolahragaanController extends Controller
 
         $tKegiatanOlahraga = DB::table('t_kegiatan_olahraga as tKegiatanOlahraga')
                 ->select(
-                    'tKegiatanOlahraga.*',
+                    'tKegiatanOlahraga.id',
                     'mCabor.nama',
+                    'tKegiatanOlahraga.nama_kelompok',
+                    'tKegiatanOlahraga.nama_ketua_kelompok',
+                    'tKegiatanOlahraga.jumlah_anggota',
                     DB::raw("
                         CASE
                             WHEN tKegiatanOlahraga.terverifikasi = '1' THEN 'Ya' ELSE 'Tidak'
                         END AS str_terverifikasi"
-                    )
+                    ),
+                    'tKegiatanOlahraga.nomor_sk',
+                    'tKegiatanOlahraga.alamat_sekretariat',
                 )
                 ->leftJoin('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
                 ->where('tKegiatanOlahraga.desa_kel_id', $id)
@@ -324,7 +338,6 @@ class KeolahragaanController extends Controller
 
         $sarana = DB::table('t_sarana as tSarana')
                     ->select(
-                        'tSarana.*',
                         'mSarana.nama',
                         DB::raw("
                             CASE
@@ -333,14 +346,20 @@ class KeolahragaanController extends Controller
                         ),
                         DB::raw("
                             CASE
-                                WHEN tSarana.status_kepemilikan = '1' THEN 'Milik Pribadi' ELSE 'Pemerintah'
+                                WHEN tSarana.status_kepemilikan = '1' THEN 'Pribadi' ELSE 'Pemerintah'
                             END AS str_status_kepemilikan"
                         ),
+                        'tSarana.nama_pemilik',
+                        'tSarana.ukuran',
                         DB::raw("
                             CASE
                                 WHEN tSarana.status_kondisi = '1' THEN 'Layak Pakai' ELSE 'Tidak Layak Pakai'
                             END AS str_status_kondisi"
-                        )
+                        ),
+                        'tSarana.lat',
+                        'tSarana.long',
+                        'tSarana.alamat',
+                        'tSarana.tahun',
                     )
                     ->join('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
                     ->where('tSarana.desa_kel_id', $id)
@@ -348,13 +367,20 @@ class KeolahragaanController extends Controller
 
         $prasarana = DB::table('t_prasarana as tPrasarana')
                     ->select(
-                        'tPrasarana.*',
                         'mPrasrana.nama',
+                        'tPrasarana.jumlah',
+                        'mPrasrana.satuan',
                         DB::raw("
                             CASE
                                 WHEN tPrasarana.status_layak = '1' THEN 'Ya' ELSE 'Tidak'
                             END AS str_status_layak"
-                        )
+                        ),
+                        DB::raw("
+                            CASE
+                                WHEN tPrasarana.hibah_pemerintah = '1' THEN 'Ya' ELSE 'Tidak'
+                            END AS hibah_pemerintah"
+                        ),
+                        'tPrasarana.tahun'
                     )
                     ->join('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
                     ->where('tPrasarana.desa_kel_id', $id)
@@ -362,19 +388,46 @@ class KeolahragaanController extends Controller
 
         $kegiatanOlahraga = DB::table('t_kegiatan_olahraga as tKegiatanOlahraga')
                     ->select(
-                        'tKegiatanOlahraga.*',
                         'mCabor.nama',
+                        'tKegiatanOlahraga.nama_kelompok',
+                        'tKegiatanOlahraga.nama_ketua_kelompok',
+                        'tKegiatanOlahraga.jumlah_anggota',
                         DB::raw("
                             CASE
                                 WHEN tKegiatanOlahraga.terverifikasi = '1' THEN 'Ya' ELSE 'Tidak'
                             END AS str_terverifikasi"
-                        )
+                        ),
+                        'tKegiatanOlahraga.nomor_sk',
+                        'tKegiatanOlahraga.alamat_sekretariat',
                     )
                     ->join('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
                     ->where('tKegiatanOlahraga.desa_kel_id', $id)
                     ->get();
 
-        return Excel::download(new KeolahragaanExport($informasiWilayah, $sarana, $prasarana, $kegiatanOlahraga), 'Laporan.xlsx');
+        $olahragaPrestasi = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
+                ->select(
+                    'prestasiKeolahragaan.nama',
+                    'prestasiKeolahragaan.tempat_lahir',
+                    DB::raw("DATE_FORMAT(prestasiKeolahragaan.tanggal_lahir, '%d/%m/%Y') as tanggal_lahir"),
+                    'prestasiKeolahragaan.alamat_lengkap',
+                    DB::raw("
+                        CASE
+                            WHEN prestasiKeolahragaan.kategori = '1' THEN 'ATLET'
+                            WHEN prestasiKeolahragaan.kategori = '2' THEN 'PELATIH'
+                            ELSE 'WASIT - JURI'
+                        END AS str_kategori"
+                    ),
+                    'prestasiKeolahragaan.organisasi_pembina',
+                    'cabangOlahraga.nama as nama_cabang_olahraga',
+                )
+                ->join('m_desa_kelurahan as desakelurahan', 'desakelurahan.id', '=', 'prestasiKeolahragaan.desa_kelurahan_id')
+                ->join('m_cabang_olahraga as cabangOlahraga', 'cabangOlahraga.id', '=', 'prestasiKeolahragaan.cabang_olahraga_id')
+                ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KONI', 'NPCI'])
+                ->where('prestasiKeolahragaan.desa_kelurahan_id', $id)
+                ->orderBy('prestasiKeolahragaan.nama', 'asc')
+                ->get();
+
+        return Excel::download(new KeolahragaanExport($informasiWilayah, $sarana, $prasarana, $kegiatanOlahraga, $olahragaPrestasi), 'Laporan.xlsx');
     }
 
     public function getSaranaById(Request $request) {

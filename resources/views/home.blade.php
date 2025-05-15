@@ -238,7 +238,7 @@
 @section('script')
 <script>
 $.ajax({
-    url: 'https://sidora.bandungkab.go.id/api/v1/infrastruktur-olahraga/get-total-sarana',
+    url: '/api/v1/infrastruktur-olahraga/get-total-sarana',
     method: 'GET',
     dataType: 'json',
     success: function(response) {
@@ -252,7 +252,7 @@ $.ajax({
 });
 
 $.ajax({
-    url: 'https://sidora.bandungkab.go.id/api/v1/infrastruktur-olahraga/get-total-kelompok-olahraga',
+    url: '/api/v1/infrastruktur-olahraga/get-total-kelompok-olahraga',
     method: 'GET',
     dataType: 'json',
     success: function(response) {

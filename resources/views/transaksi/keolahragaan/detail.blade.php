@@ -3,55 +3,63 @@
 @section('content')
 <div class="content content--top-nav">
     <div class="intro-y box py-10 sm:py-10 mt-5">
-        <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
+        <div
+            class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
             <div class="intro-x flex items-right mt-5 lg:mt-0 flex-1 z-10">
                 <div class="flex items-center mr-auto text-lg font-bold">Informasi Wilayah</div>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
-            <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <div class="intro-y col-span-12 sm:col-span-6">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
+            <div class="intro-y grid grid-cols-12 gap-6">
+                <!-- Kolom 1 -->
+                <div class="col-span-12 sm:col-span-6">
                     <div class="form-inline">
-                        <label for="input-wizard-2" class="sm:w-40 font-bold">Kecamatan</label>
-                        <input type="text" class="form-control" value="{{$wilayah->nama_kecamatan}}" readonly>
+                        <label class="sm:w-40 font-bold">Kecamatan</label>
+                        <input type="text" class="form-control" value="{{ $wilayah->nama_kecamatan }}" readonly>
                     </div>
-                    <div class="form-inline mt-5">
-                        <label for="input-wizard-2" class="sm:w-40 font-bold">Desa / Kelurahan</label>
-                        <input type="text" class="form-control" value="{{$wilayah->nama_desa_kelurahan}}" readonly>
-                    </div>
-                    <div class="form-inline mt-5">
+                </div>
+
+                <div class="col-span-12 sm:col-span-6">
+                    <div class="form-inline">
                         <label for="vertical-form-1" class="sm:w-40 font-bold">Tahun</label>
                         <?php
-                                        // Get the current year
-                                        $current_year = date('Y');
-                                        // Calculate the range of years
-                                        $years_range = range($current_year - 5, $current_year + 5);
-                                    ?>
-                        <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun"
-                            name="tahun" required>
+                            $current_year = date('Y');
+                            $years_range = range($current_year - 5, $current_year + 5);
+                        ?>
+                        <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun" name="tahun" required>
                             <option value=" ">All</option>
                             @foreach($years_range as $year)
-                            <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                <option value="{{ $year }}">{{ $year }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
-                    <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-danger w-24 ml-2">Kembali</a>
+
+                <!-- Kolom 2 -->
+                <div class="col-span-12 sm:col-span-6">
+                    <div class="form-inline">
+                        <label class="sm:w-40 font-bold">Desa / Kelurahan</label>
+                        <input type="text" class="form-control" value="{{ $wilayah->nama_desa_kelurahan }}" readonly>
+                    </div>
                 </div>
+            </div>
+            <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
+                <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-danger w-24 ml-2">Kembali</a>
+                <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-success w-24 ml-2 text-white">Export</a>
             </div>
         </div>
     </div>
-    <div class="intro-y box py-10 sm:py-10 mt-5">
+    <div class="intro-y box mt-5">
         <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
                 <h2 class="intro-y text-lg font-medium mt-10">Data sarana (Infrastruktur Keolahragaan)</h2>
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-sarana" class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-sarana"
+                    class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2" id="data-sarana">
+                <table class="table table-report col-span-12 -mt-2 mb-10" id="data-sarana">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="whitespace-nowrap">Nama Sarana</th>
@@ -85,15 +93,19 @@
                                 @if($sarana->foto_lokasi_1 == null)
                                 -
                                 @else
-                                <a href="javascript:;" class="text-success view-img" data-tw-toggle="modal" data-tw-target="#view-image">Klik untuk melihat gambar</a>
+                                <a href="javascript:;" class="text-success view-img" data-tw-toggle="modal"
+                                    data-tw-target="#view-image">Klik untuk melihat gambar</a>
                                 @endif
                             </td>
                             <td class="table-report__action text-center">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-sarana" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-sarana"> <i
-                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.sarana.delete', ['id' => $sarana->id])}}" class="flex items-center text-danger whitespace-nowrap mr-5" href="" onclick="return confirm('Apakah anda yakin ?')"> <i
-                                            data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-sarana"
+                                        href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-sarana">
+                                        <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
+                                    <a href="{{route('transaksi.keolahragaan.sarana.delete', ['id' => $sarana->id])}}"
+                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
+                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
+                                            class="w-4 h-4 mr-1"></i> Delete </a>
                                 </div>
                             </td>
                         </tr>
@@ -104,16 +116,18 @@
         </div>
     </div>
 
-    <div class="intro-y box py-10 sm:py-10 mt-5">
-        <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
+    <div class="intro-y box mt-5">
+        <div
+            class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
                 <h2 class="intro-y text-lg font-medium mt-10">Data Prasarana (Fasilitas Hibah Dari Pemerintah)</h2>
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-prasarana" class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-prasarana"
+                    class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2">
+                <table class="table table-report col-span-12 -mt-2 mb-10">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="whitespace-nowrap">Nama Prasrana</th>
@@ -136,10 +150,14 @@
                             <td>{{$prasarana->tahun}}</td>
                             <td class="table-report__action text-center">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-prasarana" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-prasarana"> <i
-                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.prasarana.delete', ['id' => $prasarana->id])}}" class="flex items-center text-danger whitespace-nowrap mr-5" href="" onclick="return confirm('Apakah anda yakin ?')"> <i
-                                            data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-prasarana"
+                                        href="javascript:;" data-tw-toggle="modal"
+                                        data-tw-target="#form-edit-prasarana"> <i data-lucide="edit"
+                                            class="w-4 h-4 mr-1"></i> Edit </a>
+                                    <a href="{{route('transaksi.keolahragaan.prasarana.delete', ['id' => $prasarana->id])}}"
+                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
+                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
+                                            class="w-4 h-4 mr-1"></i> Delete </a>
                                 </div>
                             </td>
                         </tr>
@@ -150,16 +168,18 @@
         </div>
     </div>
 
-    <div class="intro-y box py-10 sm:py-10 mt-5">
-        <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
+    <div class="intro-y box mt-5">
+        <div
+            class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
                 <h2 class="intro-y text-lg font-medium mt-10">Data Kegiatan Olahraga (Kelompok / Klub Olahraga)</h2>
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-kegiatan-olahraga" class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-kegiatan-olahraga"
+                    class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2">
+                <table class="table table-report col-span-12 -mt-2 mb-10">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="whitespace-nowrap">Cabang olahraga</th>
@@ -184,10 +204,14 @@
                             <td>{{$kegiatanOlahRaga->alamat_sekretariat}}</td>
                             <td class="table-report__action text-center">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-kegiatan" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-kegiatan-olahraga"> <i
-                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.kegiatan-olahraga.delete', ['id' => $kegiatanOlahRaga->id])}}" class="flex items-center text-danger whitespace-nowrap mr-5" href="" onclick="return confirm('Apakah anda yakin ?')"> <i
-                                            data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-kegiatan"
+                                        href="javascript:;" data-tw-toggle="modal"
+                                        data-tw-target="#form-edit-kegiatan-olahraga"> <i data-lucide="edit"
+                                            class="w-4 h-4 mr-1"></i> Edit </a>
+                                    <a href="{{route('transaksi.keolahragaan.kegiatan-olahraga.delete', ['id' => $kegiatanOlahRaga->id])}}"
+                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
+                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
+                                            class="w-4 h-4 mr-1"></i> Delete </a>
                                 </div>
                             </td>
                         </tr>
@@ -198,70 +222,32 @@
         </div>
     </div>
 
-    <!-- <div class="intro-y box py-10 sm:py-10 mt-5">
-        <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
-            <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-                <h2 class="intro-y text-lg font-medium mt-10">Data Prestasi Olahraga</h2>
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-prestasi-olahraga" class="btn btn-primary intro-y font-medium mt-10 ml-auto">Tambah Data</a>
-            </div>
-        </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
-            <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="whitespace-nowrap">Nama Kelompok (Klub)</th>
-                            <th class="whitespace-nowrap">Cabang Olahraga</th>
-                            <th class="whitespace-nowrap">Prestasi Yang di Raih</th>
-                            <th class="whitespace-nowrap">Tahun</th>
-                            <th class="whitespace-nowrap text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="table-report__action text-center">
-                                <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href="javascript:;"> <i
-                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="" class="flex items-center text-danger whitespace-nowrap mr-5" href="" onclick="return confirm('Apakah anda yakin ?')"> <i
-                                            data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> -->
-
     <div id="form-prestasi-olahraga" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Prestasi Olahraga
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.prestasi-olahraga.save')}}" method="POST" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.prestasi-olahraga.save')}}" method="POST"
+                            class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Nama Klub</label>
-                                    <input id="input-wizard-2" type="text" class="form-control" >
-                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}" readonly>
+                                    <input id="input-wizard-2" type="text" class="form-control">
+                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}"
+                                        readonly>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Cabang Olahraga</label>
-                                    <select id="input-wizard-1" type="text" class="tom-select w-full form-control" name="cabang_olahraga_id">
+                                    <select id="input-wizard-1" type="text" class="tom-select w-full form-control"
+                                        name="cabang_olahraga_id">
                                         <option value=" "> - </option>
                                         @foreach($cabangOlahraga as $sr)
                                         <option value="{{$sr->id}}">{{$sr->nama}}</option>
@@ -280,7 +266,8 @@
                                         // Calculate the range of years
                                         $years_range = range($current_year - 5, $current_year + 5);
                                     ?>
-                                    <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun" name="tahun" required>
+                                    <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control"
+                                        id="tahun" name="tahun" required>
                                         @foreach($years_range as $year)
                                         <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
                                         @endforeach
@@ -288,7 +275,8 @@
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button id="save-prestasi" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                             </div>
                         </form>
@@ -305,27 +293,32 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Sarana (Infrastruktur Olahraga)
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.sarana.save')}}" method="POST" enctype="multipart/form-data" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.sarana.save')}}" method="POST"
+                            enctype="multipart/form-data" class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Sarana</label>
-                                    <select type="text" class="tom-select w-full form-control" name="sarana_id" id="sarana-id">
+                                    <select type="text" class="tom-select w-full form-control" name="sarana_id"
+                                        id="sarana-id">
                                         <option value=" "> - </option>
                                         @foreach($infrastruktur as $sarana)
                                         <option value="{{$sarana->id}}">{{$sarana->nama}}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}" readonly>
+                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}"
+                                        readonly>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Tipe Sarana</label>
-                                    <select type="text" class="tom-select w-full form-control" name="tipe_sarana" id="tipe-sarana">
+                                    <select type="text" class="tom-select w-full form-control" name="tipe_sarana"
+                                        id="tipe-sarana">
                                         <option value=" "> - </option>
                                         <option value="1">Indoor</option>
                                         <option value="2">Outdoor</option>
@@ -333,7 +326,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Status Kepemilikan</label>
-                                    <select type="text" class="tom-select w-full form-control" name="status_kepemilikan" id="status-kepemilikan">
+                                    <select type="text" class="tom-select w-full form-control" name="status_kepemilikan"
+                                        id="status-kepemilikan">
                                         <option value=" "> - </option>
                                         <option value="1">Milik Pribadi</option>
                                         <option value="2">Pemerintah</option>
@@ -349,7 +343,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Status Kondisi</label>
-                                    <select type="text" class="tom-select w-full form-control" name="status_kondisi" id="status-kondisi">
+                                    <select type="text" class="tom-select w-full form-control" name="status_kondisi"
+                                        id="status-kondisi">
                                         <option value=" "> - </option>
                                         <option value="1">Layak Pakai</option>
                                         <option value="2">Tidak Layak Pakai</option>
@@ -369,7 +364,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Foto Lokasi 1</label>
-                                    <input id="input-wizard-1" type="file" class="form-control" name="foto_lokasi_1" id="foto-lokasi-1">
+                                    <input id="input-wizard-1" type="file" class="form-control" name="foto_lokasi_1"
+                                        id="foto-lokasi-1">
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Data Tahun</label>
@@ -377,7 +373,8 @@
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button id="save-prestasi" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                             </div>
                         </form>
@@ -394,27 +391,32 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Prasarana
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.prasarana.save')}}" method="POST" enctype="multipart/form-data" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.prasarana.save')}}" method="POST"
+                            enctype="multipart/form-data" class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Prasarana</label>
-                                    <select type="text" class="tom-select w-full form-control" name="prasarana_id" id="prasarana-id">
+                                    <select type="text" class="tom-select w-full form-control" name="prasarana_id"
+                                        id="prasarana-id">
                                         <option value=" "> - </option>
                                         @foreach($mPrasarana as $prs)
                                         <option value="{{$prs->id}}">{{$prs->nama}}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}" readonly>
+                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}"
+                                        readonly>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Hibah Pemerintah</label>
-                                    <select type="text" class="tom-select w-full form-control" name="hibah_pemerintah" id="hibah-pemerintah">
+                                    <select type="text" class="tom-select w-full form-control" name="hibah_pemerintah"
+                                        id="hibah-pemerintah">
                                         <option value=" "> - </option>
                                         <option value="0">Tidak</option>
                                         <option value="1">Ya</option>
@@ -426,7 +428,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Status Layak</label>
-                                    <select type="text" class="tom-select w-full form-control" name="status_layak" id="status-layak">
+                                    <select type="text" class="tom-select w-full form-control" name="status_layak"
+                                        id="status-layak">
                                         <option value=" "> - </option>
                                         <option value="1">Ya</option>
                                         <option value="2">Tidak </option>
@@ -442,7 +445,8 @@
                                 </div> -->
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button id="save-prestasi" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                             </div>
                         </form>
@@ -459,23 +463,27 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Kegiatan Olahraga
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.kegiatan-olahraga.save')}}" method="POST" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.kegiatan-olahraga.save')}}" method="POST"
+                            class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Cabang Olahraga</label>
-                                    <select type="text" class="tom-select w-full form-control" name="cabang_olahraga_id" id="cabang-olahraga-id">
+                                    <select type="text" class="tom-select w-full form-control" name="cabang_olahraga_id"
+                                        id="cabang-olahraga-id">
                                         <option value=" "> - </option>
                                         @foreach($cabangOlahraga as $co)
                                         <option value="{{$co->id}}">{{$co->nama}}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}" readonly>
+                                    <input type="hidden" class="form-control" name="des_kel_id" value="{{$wilayah->id}}"
+                                        readonly>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Nama Kelompok (Klub)</label>
@@ -483,7 +491,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Ketua Klub</label>
-                                    <input type="text" class="form-control" name="nama_ketua_kelompok" id="nama-ketua-kelompok">
+                                    <input type="text" class="form-control" name="nama_ketua_kelompok"
+                                        id="nama-ketua-kelompok">
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Jumlah Anggota</label>
@@ -491,7 +500,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Terverifikasi ?</label>
-                                    <select type="text" class="tom-select w-full form-control" name="terverifikasi" id="terverifikasi">
+                                    <select type="text" class="tom-select w-full form-control" name="terverifikasi"
+                                        id="terverifikasi">
                                         <option value=" "> - </option>
                                         <option value="1">Ya</option>
                                         <option value="2">Tidak</option>
@@ -503,11 +513,13 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Alamat Sekertariat</label>
-                                    <textarea type="text" class="form-control" name="alamat_sekretariat" id="alamat-sekretariat"></textarea>
+                                    <textarea type="text" class="form-control" name="alamat_sekretariat"
+                                        id="alamat-sekretariat"></textarea>
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button id="save-prestasi" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                             </div>
                         </form>
@@ -540,17 +552,20 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Edit Sarana (Infrastruktur Olahraga)
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.sarana.update')}}" method="POST" enctype="multipart/form-data" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.sarana.update')}}" method="POST"
+                            enctype="multipart/form-data" class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Sarana</label>
-                                    <select type="text" class="tom-select w-full form-control sarana_id" name="sarana_id">
+                                    <select type="text" class="tom-select w-full form-control sarana_id"
+                                        name="sarana_id">
                                         <option value=" "> - </option>
                                         @foreach($infrastruktur as $sarana)
                                         <option value="{{$sarana->id}}">{{$sarana->nama}}</option>
@@ -560,7 +575,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Tipe Sarana</label>
-                                    <select type="text" class="tom-select w-full form-control tipe_sarana" name="tipe_sarana">
+                                    <select type="text" class="tom-select w-full form-control tipe_sarana"
+                                        name="tipe_sarana">
                                         <option value=" "> - </option>
                                         <option value="1">Indoor</option>
                                         <option value="2">Outdoor</option>
@@ -568,7 +584,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Status Kepemilikan</label>
-                                    <select type="text" class="tom-select w-full form-control status_kepemilikan" name="status_kepemilikan">
+                                    <select type="text" class="tom-select w-full form-control status_kepemilikan"
+                                        name="status_kepemilikan">
                                         <option value=" "> - </option>
                                         <option value="1">Milik Pribadi</option>
                                         <option value="2">Pemerintah</option>
@@ -584,7 +601,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Status Kondisi</label>
-                                    <select type="text" class="tom-select w-full form-control status_kondisi" name="status_kondisi">
+                                    <select type="text" class="tom-select w-full form-control status_kondisi"
+                                        name="status_kondisi">
                                         <option value=" "> - </option>
                                         <option value="1">Layak Pakai</option>
                                         <option value="2">Tidak Layak Pakai</option>
@@ -605,7 +623,8 @@
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Foto Lokasi 1</label>
                                     <input id="input-wizard-1" type="file" class="form-control" name="foto_lokasi_1">
-                                    <input id="input-wizard-1" type="hidden" class="form-control ex_foto_lokasi_1" name="ex_foto_lokasi_1">
+                                    <input id="input-wizard-1" type="hidden" class="form-control ex_foto_lokasi_1"
+                                        name="ex_foto_lokasi_1">
                                 </div>
                                 <div class="form-inline mt-3">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold"></label>
@@ -613,7 +632,8 @@
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Update</button>
                             </div>
                         </form>
@@ -630,17 +650,20 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Edit Prasarana
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.prasarana.update')}}" method="POST" enctype="multipart/form-data" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.prasarana.update')}}" method="POST"
+                            enctype="multipart/form-data" class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Prasarana</label>
-                                    <select type="text" class="tom-select w-full form-control prasarana_id" name="prasarana_id">
+                                    <select type="text" class="tom-select w-full form-control prasarana_id"
+                                        name="prasarana_id">
                                         <option value=" "> - </option>
                                         @foreach($mPrasarana as $prs)
                                         <option value="{{$prs->id}}">{{$prs->nama}}</option>
@@ -650,7 +673,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Hibah Pemerintah</label>
-                                    <select type="text" class="tom-select w-full form-control hibah_pemerintah" name="hibah_pemerintah">
+                                    <select type="text" class="tom-select w-full form-control hibah_pemerintah"
+                                        name="hibah_pemerintah">
                                         <option value=" "> - </option>
                                         <option value="0">Tidak</option>
                                         <option value="1">Ya</option>
@@ -662,7 +686,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Status Layak</label>
-                                    <select type="text" class="tom-select w-full form-control status_layak" name="status_layak">
+                                    <select type="text" class="tom-select w-full form-control status_layak"
+                                        name="status_layak">
                                         <option value=" "> - </option>
                                         <option value="1">Ya</option>
                                         <option value="2">Tidak </option>
@@ -678,7 +703,8 @@
                                 </div> -->
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Update</button>
                             </div>
                         </form>
@@ -695,17 +721,20 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Form Edit Kegiatan Olahraga
                             </h2>
                         </div>
-                        <form action="{{route('transaksi.keolahragaan.kegiatan-olahraga.update')}}" method="POST" class="p-5">
+                        <form action="{{route('transaksi.keolahragaan.kegiatan-olahraga.update')}}" method="POST"
+                            class="p-5">
                             @csrf
                             <div class="preview">
                                 <div class="form-inline">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Cabang Olahraga</label>
-                                    <select type="text" class="tom-select w-full form-control cabang_olahraga_id" name="cabang_olahraga_id">
+                                    <select type="text" class="tom-select w-full form-control cabang_olahraga_id"
+                                        name="cabang_olahraga_id">
                                         <option value=" "> - </option>
                                         @foreach($cabangOlahraga as $co)
                                         <option value="{{$co->id}}">{{$co->nama}}</option>
@@ -719,7 +748,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Nama Ketua Klub</label>
-                                    <input type="text" class="form-control nama_ketua_kelompok" name="nama_ketua_kelompok">
+                                    <input type="text" class="form-control nama_ketua_kelompok"
+                                        name="nama_ketua_kelompok">
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Jumlah Anggota</label>
@@ -727,7 +757,8 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Terverifikasi ?</label>
-                                    <select type="text" class="tom-select w-full form-control terverifikasi" name="terverifikasi">
+                                    <select type="text" class="tom-select w-full form-control terverifikasi"
+                                        name="terverifikasi">
                                         <option value=" "> - </option>
                                         <option value="1">Ya</option>
                                         <option value="2">Tidak</option>
@@ -739,11 +770,13 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Alamat Sekertariat</label>
-                                    <textarea type="text" class="form-control alamat_sekretariat" name="alamat_sekretariat"></textarea>
+                                    <textarea type="text" class="form-control alamat_sekretariat"
+                                        name="alamat_sekretariat"></textarea>
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Update</button>
                             </div>
                         </form>
@@ -801,13 +834,15 @@ $(function() {
             url: '{{route("transaksi.get.image.by.sarana.id")}}', // Specify the URL of your server endpoint
             type: 'POST', // or 'POST' depending on your server setup
             dataType: 'json', // Assuming the response will be
-            data: { id: id },
+            data: {
+                id: id
+            },
             success: function(response) {
 
                 // Assuming response.data is an array of SPK objects
                 var data = response.data;
 
-                $("#img-holder").attr("src", "data:image/jpeg;base64,"+data.foto_lokasi_1);
+                $("#img-holder").attr("src", "data:image/jpeg;base64," + data.foto_lokasi_1);
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
@@ -829,7 +864,9 @@ $(function() {
             url: '{{route("transaksi.get.sarana.id")}}',
             type: 'POST',
             dataType: 'json',
-            data: { id: id },
+            data: {
+                id: id
+            },
             success: function(response) {
 
                 var data = response.data;
@@ -880,7 +917,9 @@ $(function() {
             url: '{{route("transaksi.get.prasarana.id")}}',
             type: 'POST',
             dataType: 'json',
-            data: { id: id },
+            data: {
+                id: id
+            },
             success: function(response) {
 
                 var data = response.data;
@@ -926,7 +965,9 @@ $(function() {
             url: '{{route("transaksi.get.kegiatan.olahraga.by.id")}}',
             type: 'POST',
             dataType: 'json',
-            data: { id: id },
+            data: {
+                id: id
+            },
             success: function(response) {
 
                 var data = response.data;
@@ -935,11 +976,13 @@ $(function() {
 
                 $("#form-edit-kegiatan-olahraga .id").val(data.id);
 
-                const cabang_olahraga_id = $("#form-edit-kegiatan-olahraga .cabang_olahraga_id")[0].tomselect;
+                const cabang_olahraga_id = $("#form-edit-kegiatan-olahraga .cabang_olahraga_id")[0]
+                    .tomselect;
                 cabang_olahraga_id.setValue(data.cabang_olahraga_id);
 
                 $("#form-edit-kegiatan-olahraga .nama_kelompok").val(data.nama_kelompok);
-                $("#form-edit-kegiatan-olahraga .nama_ketua_kelompok").val(data.nama_ketua_kelompok);
+                $("#form-edit-kegiatan-olahraga .nama_ketua_kelompok").val(data
+                .nama_ketua_kelompok);
                 $("#form-edit-kegiatan-olahraga .jumlah_anggota").val(data.jumlah_anggota);
 
                 const terverifikasi = $("#form-edit-kegiatan-olahraga .terverifikasi")[0].tomselect;

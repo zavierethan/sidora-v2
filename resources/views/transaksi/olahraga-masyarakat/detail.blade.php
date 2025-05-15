@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-2 gap-y-5">
                 <div class="intro-y col-span-12 sm:col-span-6 p-3">
                     <div class="form-inline">
@@ -94,9 +94,9 @@
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-lisensi" class="flex items-center ml-auto text-white btn btn-primary shadow-md">Tambah Data Lesensi</a>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2">
+                <table class="table table-report col-span-12 -mt-2 mb-10">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="whitespace-nowrap">Nama Lisensi</th>
@@ -136,9 +136,9 @@
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-prestasi" class="flex items-center ml-auto text-white btn btn-primary shadow-md">Tambah Data Prestasi</a>
             </div>
         </div>
-        <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
+        <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
             <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2">
+                <table class="table table-report col-span-12 -mt-2 mb-10">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="whitespace-nowrap">Nama Prestasi</th>
