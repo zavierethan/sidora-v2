@@ -1,24 +1,34 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Providers;
 
-use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
-class ForceHttps
+class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Register any application services.
      */
-    public function handle(Request $request, Closure $next): Response
+    public function register(): void
     {
-	if(!$request->secure() && env('APP_ENV') == 'production') {
-            return redirect()->secure($request->getRequestUri());
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS', true);
         }
 
-        return $next($request);
+        // Redirect HTTP requests to HTTPS
+        if (!$this->app->environment('local')) {
+            $this->app['request']->server->set('HTTPS', true);
+            $this->app['request']->server->set('HTTP_X_FORWARDED_PROTO', 'https');
+        }
     }
 }
