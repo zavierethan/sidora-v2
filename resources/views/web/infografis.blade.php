@@ -170,6 +170,9 @@ $(document).ready(function() {
             url: `https://sidora.bandungkab.go.id/api/v1/infrastruktur-olahraga/get-fasilitas-per-desa-kelurahan-filter-by-kecamatan/?kecamatan_id=${kecamatan_id}`,
             method: 'GET',
             dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
                 success: function(response) {
                     // Handle the response data
                     var categories = response.data.map(item => item.nama_sarana);
