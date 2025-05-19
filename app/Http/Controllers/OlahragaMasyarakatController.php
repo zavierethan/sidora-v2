@@ -3,42 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\OlahragaMasyarakatExport;
+use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use Auth;
 
 class OlahragaMasyarakatController extends Controller
 {
     public function index() {
+        $kecamatan = DB::table('m_kecamatan as kecamatan')
+                        ->select(
+                            'kecamatan.id',
+                            'kecamatan.nama'
+                        )
+                        ->orderBy('kecamatan.nama', 'asc')
+                        ->get();
+
         $desaKelurahan = DB::table('m_desa_kelurahan as desa_kelurahan')
-                        ->select('desa_kelurahan.id', 'desa_kelurahan.nama as desa_kelurahan', 'kecamatan.nama as kecamatan')
+                        ->select(
+                            'desa_kelurahan.id',
+                            'desa_kelurahan.nama as desa_kelurahan',
+                            'kecamatan.nama as kecamatan'
+                        )
                         ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desa_kelurahan.kecamatan_id')
+                        ->orderBy('desa_kelurahan.nama', 'asc')
                         ->get();
 
         $cabangOlahraga = DB::table('m_cabang_olahraga')->get();
 
         $indukOlahraga = DB::table('m_induk_olahraga')->get();
 
-        $data = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
-                ->select(
-                    'prestasiKeolahragaan.*',
-                    'desakelurahan.nama as nama_desa_kelurahan',
-                    'indukOlahraga.nama as nama_induk_olahraga',
-                    DB::raw("
-                        CASE
-                            WHEN prestasiKeolahragaan.kategori = '1' THEN 'ATLET'
-                            WHEN prestasiKeolahragaan.kategori = '2' THEN 'PELATIH'
-                            ELSE '-'
-                        END AS str_kategori"
-                    ),
-                )
-                ->join('m_desa_kelurahan as desakelurahan', 'desakelurahan.id', '=', 'prestasiKeolahragaan.desa_kelurahan_id')
-                ->join('m_induk_olahraga as indukOlahraga', 'indukOlahraga.id', '=', 'prestasiKeolahragaan.induk_olahraga_id')
-                ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KORMI'])
-                ->orderBy('prestasiKeolahragaan.created_at', 'DESC')
-                ->paginate(10);
 
-
-        return view('transaksi.olahraga-masyarakat.index', compact('desaKelurahan', 'cabangOlahraga','indukOlahraga', 'data'));
+        return view('transaksi.olahraga-masyarakat.index', compact('desaKelurahan','kecamatan', 'cabangOlahraga','indukOlahraga'));
     }
 
     public function getLists(Request $request) {
@@ -54,6 +50,8 @@ class OlahragaMasyarakatController extends Controller
                 'prestasiKeolahragaan.jenis_kelamin',
                 DB::raw("DATE_FORMAT(prestasiKeolahragaan.tanggal_lahir, '%d/%m/%Y') as tanggal_lahir"),
                 'prestasiKeolahragaan.alamat_lengkap',
+                'desakelurahan.nama as nama_desa_kelurahan',
+                'kecamatan.nama as nama_kecamatan',
                 'prestasiKeolahragaan.organisasi_pembina',
                 'desakelurahan.nama as nama_desa_kelurahan',
                 'indukOlahraga.nama as nama_induk_olahraga',
@@ -66,6 +64,7 @@ class OlahragaMasyarakatController extends Controller
                 ),
             )
             ->join('m_desa_kelurahan as desakelurahan', 'desakelurahan.id', '=', 'prestasiKeolahragaan.desa_kelurahan_id')
+            ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desakelurahan.kecamatan_id')
             ->join('m_induk_olahraga as indukOlahraga', 'indukOlahraga.id', '=', 'prestasiKeolahragaan.induk_olahraga_id')
             ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KORMI']);
 
@@ -74,6 +73,14 @@ class OlahragaMasyarakatController extends Controller
                 $query->where('desakelurahan.nama', 'like', "%$search%")
                         ->orWhere('indukOlahraga.nama', 'like', "%$search%");
             });
+        }
+
+        if (!empty($params['kecamatan'])) {
+            $query->where('desakelurahan.kecamatan_id', $params['kecamatan']);
+        }
+
+        if (!empty($params['desa_kelurahan'])) {
+            $query->where('prestasiKeolahragaan.desa_kelurahan_id', $params['desa_kelurahan']);
         }
 
         $start = $request->input('start', 0);
@@ -264,6 +271,32 @@ class OlahragaMasyarakatController extends Controller
 
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function export() {
+
+        $data = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
+            ->select(
+                'prestasiKeolahragaan.nama',
+                'prestasiKeolahragaan.tempat_lahir',
+                DB::raw("DATE_FORMAT(prestasiKeolahragaan.tanggal_lahir, '%d/%m/%Y') as tanggal_lahir"),
+                'prestasiKeolahragaan.alamat_lengkap',
+                DB::raw("
+                    CASE
+                        WHEN prestasiKeolahragaan.kategori = '1' THEN 'ATLET'
+                        WHEN prestasiKeolahragaan.kategori = '2' THEN 'PELATIH'
+                        ELSE 'WASIT - JURI'
+                    END AS str_kategori"
+                ),
+                'prestasiKeolahragaan.organisasi_pembina',
+                'indukOlahraga.nama as nama_induk_olahraga',
+            )
+            ->join('m_desa_kelurahan as desakelurahan', 'desakelurahan.id', '=', 'prestasiKeolahragaan.desa_kelurahan_id')
+            ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desakelurahan.kecamatan_id')
+            ->join('m_induk_olahraga as indukOlahraga', 'indukOlahraga.id', '=', 'prestasiKeolahragaan.induk_olahraga_id')
+            ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KORMI'])->get();
+
+        return Excel::download(new OlahragaMasyarakatExport($data), 'Laporan Olahraga Msyarakat (KORMI).xlsx');
     }
 }
 

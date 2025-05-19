@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class OlahragaPrestasiSheet implements FromCollection, WithTitle, WithHeadings, WithStyles, WithEvents, ShouldAutoSize
+class OlahragaMasyarakatSheet implements FromCollection, WithTitle, WithHeadings, WithStyles, WithEvents, ShouldAutoSize
 {
     protected $data;
 
@@ -35,7 +35,7 @@ class OlahragaPrestasiSheet implements FromCollection, WithTitle, WithHeadings, 
             'Alamat',
             'Kategori',
             'Organisasi Pembina',
-            'Cabang Olahraga',
+            'Induk Olahraga',
 
         ];
     }

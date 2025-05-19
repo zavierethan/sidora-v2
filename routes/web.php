@@ -154,6 +154,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('/detail/delete/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'deleteDetail'])->name('transaksi.olahraga-prestasi.detail.delete');
             Route::get('/delete/{keolahragaanId}/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'delete'])->name('transaksi.olahraga-prestasi.delete');
 
+            Route::get('/export', [App\Http\Controllers\OlahragaPrestasiController::class, 'export'])->name('transaksi.olahraga-prestasi.export');
             Route::post('/upload-foto', [App\Http\Controllers\OlahragaPrestasiController::class, 'uploadFoto'])->name('transaksi.olahraga-prestasi.upload-foto');
         });
 
@@ -167,6 +168,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/detail/delete/{id}', [App\Http\Controllers\OlahragaMasyarakatController::class, 'deleteDetail'])->name('transaksi.olahraga-masyarakat.detail.delete');
             Route::get('/delete/{keolahragaanId}/{id}', [App\Http\Controllers\OlahragaMasyarakatController::class, 'delete'])->name('transaksi.olahraga-masyarakat.delete');
 
+            Route::get('/export', [App\Http\Controllers\OlahragaMasyarakatController::class, 'export'])->name('transaksi.olahraga-masyarakat.export');
             Route::post('/upload-foto', [App\Http\Controllers\OlahragaMasyarakatController::class, 'uploadFoto'])->name('transaksi.olahraga-masyarakat.upload-foto');
         });
 

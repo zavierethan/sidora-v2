@@ -8,19 +8,34 @@
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap xl:flex-nowrap items-center mt-2">
             <div class="flex w-full sm:w-auto">
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-input" class="btn btn-primary shadow-md mr-2"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>Tambah Data </a>
+                <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
+                    <select class="form-select w-xl mr-2" id="f-kecamatan">
+                        <option value=" ">Kecamatan</option>
+                        @foreach($kecamatan as $kec)
+                        <option value="{{$kec->id}}">{{$kec->nama}}</option>
+                        @endforeach
+                    </select>
+                    <!-- Dropdown Filter -->
+                    <select class="form-select w-xl mr-2" id="f-desa-kelurahan">
+                        <option value=" ">Desa / Kelurahan</option>
+                        @foreach($desaKelurahan as $deskel)
+                        <option value="{{$deskel->id}}">{{$deskel->desa_kelurahan}}</option>
+                        @endforeach
+                    </select>
+                    <input type="text" data-table-filter="search"
+                        class="form-control form-control-solid w-xl mr-2 ps-15" placeholder="Cari" />
+                </div>
             </div>
             <div class="hidden xl:block mx-auto text-slate-500"></div>
             <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
-                <div class="position-relative my-1">
-                    <i class="ki-duotone ki-magnifier fs-2 position-absolute top-50 translate-middle-y ms-4">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                    <input type="text" data-table-filter="search"
-                        class="form-control form-control-solid w-250px ps-15"
-                        placeholder="Cari" />
-                </div>
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-input"
+                    class="btn btn-primary shadow-md mr-2">
+                    <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>Tambah Data
+                </a>
+                <a href="{{route('transaksi.olahraga-prestasi.export')}}"
+                    class="btn btn-primary shadow-md mr-2">
+                    <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>Export
+                </a>
             </div>
         </div>
         <!-- BEGIN: Data List -->
@@ -32,7 +47,8 @@
                         <th class="whitespace-nowrap">Tempat Lahir</th>
                         <th class="whitespace-nowrap">Tanggal Lahir</th>
                         <th class="whitespace-nowrap">Jenis Kelamin</th>
-                        <th class="whitespace-nowrap">Alamat</th>
+                        <th class="whitespace-nowrap">Kecamatan</th>
+                        <th class="whitespace-nowrap">Desa / Kelurahan</th>
                         <th class="whitespace-nowrap">Kategori</th>
                         <th class="whitespace-nowrap">Organisasi Pembina</th>
                         <th class="whitespace-nowrap">Cabang Olahraga</th>
@@ -52,7 +68,8 @@
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
                     <div class="intro-y box">
-                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <div
+                            class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                             <h2 class="font-medium text-base mr-auto">
                                 Input Data Olahraga Prestasi
                             </h2>
@@ -73,7 +90,9 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Jenis Kelamin</label>
-                                    <select data-placeholder="Pilih Jenis Kelamin" class="tom-select w-full form-control" id="jenis-kelamin" name="jenis_kelamin" required>
+                                    <select data-placeholder="Pilih Jenis Kelamin"
+                                        class="tom-select w-full form-control" id="jenis-kelamin" name="jenis_kelamin"
+                                        required>
                                         <option value=" "> - </option>
                                         <option value="L">L</option>
                                         <option value="P">P</option>
@@ -81,20 +100,25 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Desa / Kelurahan</label>
-                                    <select data-placeholder="Pilih Desa / Kelurahan" class="tom-select w-full form-control" id="desa-kelurahan" name="desa_kelurahan" required>
+                                    <select data-placeholder="Pilih Desa / Kelurahan"
+                                        class="tom-select w-full form-control" id="desa-kelurahan" name="desa_kelurahan"
+                                        required>
                                         <option value=" "> - </option>
                                         @foreach($desaKelurahan as $deskel)
-                                        <option value="{{$deskel->id}}">KEC.{{$deskel->kecamatan}} - {{$deskel->desa_kelurahan}}</option>
+                                        <option value="{{$deskel->id}}">KEC.{{$deskel->kecamatan}} -
+                                            {{$deskel->desa_kelurahan}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Alamat Lengkap</label>
-                                    <textarea type="text" class="form-control" name="alamat_lengkap" id="alamat-lengkap"></textarea>
+                                    <textarea type="text" class="form-control" name="alamat_lengkap"
+                                        id="alamat-lengkap"></textarea>
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="horizontal-form-2" class="sm:w-40 font-bold">Kategori</label>
-                                    <select data-placeholder="Pilih Kategori Prestasi" class="tom-select w-full form-control" id="kategori" name="kategori" required>
+                                    <select data-placeholder="Pilih Kategori Prestasi"
+                                        class="tom-select w-full form-control" id="kategori" name="kategori" required>
                                         <option value=" "> - </option>
                                         <option value="1">Atlet</option>
                                         <option value="2">Pelatih</option>
@@ -103,7 +127,9 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="horizontal-form-2" class="sm:w-40 font-bold">Organisasi Pembina</label>
-                                    <select data-placeholder="Pilih Organisasi Pembina" class="tom-select w-full form-control" id="organisasi-pembina" name="organisasi_pembina" required>
+                                    <select data-placeholder="Pilih Organisasi Pembina"
+                                        class="tom-select w-full form-control" id="organisasi-pembina"
+                                        name="organisasi_pembina" required>
                                         <option value=" "> - </option>
                                         <option value="KONI">KONI</option>
                                         <option value="NPCI">NPCI</option>
@@ -111,7 +137,9 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="horizontal-form-2" class="sm:w-40 font-bold">Cabang Olahraga</label>
-                                    <select data-placeholder="Pilih Cabang Olahraga" class="tom-select w-full form-control" id="cabang-olahraga" name="cabang_olahraga" required>
+                                    <select data-placeholder="Pilih Cabang Olahraga"
+                                        class="tom-select w-full form-control" id="cabang-olahraga"
+                                        name="cabang_olahraga" required>
                                         <option value=" "> - </option>
                                         @foreach($cabangOlahraga as $cabor)
                                         <option value="{{$cabor->id}}">{{$cabor->nama}}</option>
@@ -120,7 +148,7 @@
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Foto</label>
-                                    <img id="img-holder" src="" style="width:150px; height:150px;"/>
+                                    <img id="img-holder" src="" style="width:150px; height:150px;" />
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold"></label>
@@ -128,7 +156,8 @@
                                 </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button type="button" data-tw-dismiss="modal"
+                                    class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
                                 <button id="save" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                             </div>
                         </div>
@@ -143,104 +172,137 @@
 
 @section('script')
 <script>
-    $(function() {
+$(function() {
 
-        $('#foto-upload').on('change', function() {
-            var file = this.files[0];
+    $('#foto-upload').on('change', function() {
+        var file = this.files[0];
 
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var imageData = e.target.result;
-                    console.log(imageData);
-                    $("#img-holder").attr("src", imageData);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        if (localStorage.getItem('payloads')) {
-            localStorage.removeItem('payloads');
-            console.log('Item deleted from localStorage.');
-        } else {
-            console.log('Item not found in localStorage.');
-        }
-
-        $("#save").on("click", function() {
-            var payload = {
-                nama: $("#nama").val(),
-                tempat_lahir: $("#tempat-lahir").val(),
-                tanggal_lahir: $("#tanggal-lahir").val(),
-                jenis_kelamin: $("#jenis-kelamin").val(),
-                desa_kelurahan_code: $("#desa-kelurahan").val(),
-                desa_kelurahan_desc: $("#desa-kelurahan").find('option:selected').text(),
-                alamat_lengkap: $("#alamat-lengkap").val(),
-                kategori_code: $("#kategori").val(),
-                kategori_desc: $("#kategori").find('option:selected').text(),
-                organisasi_pembina_code: $("#organisasi-pembina").val(),
-                organisasi_pembina_desc: $("#organisasi-pembina").find('option:selected').text(),
-                cabang_olahraga_code: $("#cabang-olahraga").val(),
-                cabang_olahraga_desc: $("#cabang-olahraga").find('option:selected').text(),
-                foto: $("#img-holder").attr("src"),
-                lisensi: [],
-                prestasi: [],
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imageData = e.target.result;
+                console.log(imageData);
+                $("#img-holder").attr("src", imageData);
             };
-
-            var payloadString = JSON.stringify(payload);
-
-            localStorage.setItem('payloads', payloadString);
-
-            location.href = "{{route('transaksi.olahraga-prestasi.create')}}";
-        });
+            reader.readAsDataURL(file);
+        }
     });
 
-    $(document).ready(function () {
-        const table = $("#table").DataTable({
-            processing: true,
-            serverSide: true,
-            searching: false,
-            lengthChange: false,
-            paging: true,
-            pageLength: 10,
-            ajax: {
-                url: `/transaksi/olahraga-prestasi/get-lists`,
-                type: 'GET',
-                data: function (d) {
-                    d.custom_search = $('[data-table-filter="search"]').val();
-                },
-                dataSrc: function (json) {
-                    return json.data;
-                }
+    if (localStorage.getItem('payloads')) {
+        localStorage.removeItem('payloads');
+        console.log('Item deleted from localStorage.');
+    } else {
+        console.log('Item not found in localStorage.');
+    }
+
+    $("#save").on("click", function() {
+        var payload = {
+            nama: $("#nama").val(),
+            tempat_lahir: $("#tempat-lahir").val(),
+            tanggal_lahir: $("#tanggal-lahir").val(),
+            jenis_kelamin: $("#jenis-kelamin").val(),
+            desa_kelurahan_code: $("#desa-kelurahan").val(),
+            desa_kelurahan_desc: $("#desa-kelurahan").find('option:selected').text(),
+            alamat_lengkap: $("#alamat-lengkap").val(),
+            kategori_code: $("#kategori").val(),
+            kategori_desc: $("#kategori").find('option:selected').text(),
+            organisasi_pembina_code: $("#organisasi-pembina").val(),
+            organisasi_pembina_desc: $("#organisasi-pembina").find('option:selected').text(),
+            cabang_olahraga_code: $("#cabang-olahraga").val(),
+            cabang_olahraga_desc: $("#cabang-olahraga").find('option:selected').text(),
+            foto: $("#img-holder").attr("src"),
+            lisensi: [],
+            prestasi: [],
+        };
+
+        var payloadString = JSON.stringify(payload);
+
+        localStorage.setItem('payloads', payloadString);
+
+        location.href = "{{route('transaksi.olahraga-prestasi.create')}}";
+    });
+});
+
+$(document).ready(function() {
+    const table = $("#table").DataTable({
+        processing: true,
+        serverSide: true,
+        searching: false,
+        lengthChange: false,
+        paging: true,
+        pageLength: 10,
+        ajax: {
+            url: `/transaksi/olahraga-prestasi/get-lists`,
+            type: 'GET',
+            data: function(d) {
+                d.custom_search = $('[data-table-filter="search"]').val();
+                d.kecamatan = $('#f-kecamatan').val();
+                d.desa_kelurahan = $('#f-desa-kelurahan').val();
             },
-            columns: [
-                { data: 'nama', name: 'nama' },
-                { data: 'tempat_lahir', name: 'tempat_lahir' },
-                { data: 'tanggal_lahir', name: 'tanggal_lahir'},
-                { data: 'jenis_kelamin', name: 'jenis_kelamin'},
-                { data: 'alamat_lengkap', name: 'alamat_lengkap'},
-                { data: 'str_kategori', name: 'str_kategori'},
-                { data: 'organisasi_pembina', name: 'organisasi_pembina'},
-                { data: 'nama_cabang_olahraga', name: 'nama_cabang_olahraga'},
-                {
-                    data: null,
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `
+            dataSrc: function(json) {
+                return json.data;
+            }
+        },
+        columns: [{
+                data: 'nama',
+                name: 'nama'
+            },
+            {
+                data: 'tempat_lahir',
+                name: 'tempat_lahir'
+            },
+            {
+                data: 'tanggal_lahir',
+                name: 'tanggal_lahir'
+            },
+            {
+                data: 'jenis_kelamin',
+                name: 'jenis_kelamin'
+            },
+            {
+                data: 'nama_kecamatan',
+                name: 'nama_kecamatan'
+            },
+            {
+                data: 'nama_desa_kelurahan',
+                name: 'nama_desa_kelurahan'
+            },
+            {
+                data: 'str_kategori',
+                name: 'str_kategori'
+            },
+            {
+                data: 'organisasi_pembina',
+                name: 'organisasi_pembina'
+            },
+            {
+                data: 'nama_cabang_olahraga',
+                name: 'nama_cabang_olahraga'
+            },
+            {
+                data: null,
+                name: 'action',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    return `
                             <div class="flex justify-center items-center">
                                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/olahraga-prestasi/detail/${row.id}"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Detail </a>
                             </div>
                         `;
-                    }
                 }
-            ]
-        });
-
-        $('[data-table-filter="search"]').on('keyup', function () {
-            table.ajax.reload();
-        });
+            }
+        ]
     });
+
+    $('[data-table-filter="search"]').on('keyup', function() {
+        table.ajax.reload();
+    });
+
+    $('#f-kecamatan, #f-desa-kelurahan').on('change', function () {
+        table.ajax.reload(); // Trigger DataTable redraw with updated filter values
+    });
+});
 </script>
 @endsection

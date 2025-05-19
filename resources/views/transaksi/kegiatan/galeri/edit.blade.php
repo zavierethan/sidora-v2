@@ -41,10 +41,10 @@
                     <label for="vertical-form-2" class="form-label">Date</label>
                     <input id="vertical-form-2" type="date" name="date" value="{{$data->date}}"  class="form-control">
                 </div>
-                <div class="mt-3">
+                <!-- <div class="mt-3">
                     <label for="vertical-form-2" class="form-label">Summary</label>
                     <textarea id="vertical-form-2" type="text" name="summary" value="{{$data->summary}}" class="form-control h-50"></textarea>
-                </div>
+                </div> -->
                 <div class="mt-3 text-right">
                     <a href="{{route('kegiatan.galeri.index')}}" class="btn btn-danger mt-5">Kembali</a>
                     <button type="submit" class="btn btn-primary mt-5">Update</button>

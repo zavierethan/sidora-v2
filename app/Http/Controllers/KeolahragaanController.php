@@ -12,6 +12,14 @@ use Auth;
 class KeolahragaanController extends Controller
 {
     public function index() {
+        $kecamatan = DB::table('m_kecamatan as kecamatan')
+                        ->select(
+                            'kecamatan.id',
+                            'kecamatan.nama'
+                        )
+                        ->orderBy('kecamatan.nama', 'asc')
+                        ->get();
+
         $desaKelurahan = DB::table('m_desa_kelurahan as desa_kelurahan')
                         ->select(
                             'desa_kelurahan.id',
@@ -19,24 +27,10 @@ class KeolahragaanController extends Controller
                             'kecamatan.nama as kecamatan'
                         )
                         ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desa_kelurahan.kecamatan_id')
+                        ->orderBy('desa_kelurahan.nama', 'asc')
                         ->get();
 
-        $data = DB::table('m_desa_kelurahan AS dk')
-                    ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
-                    ->selectSub(function ($query) {
-                        $query->selectRaw('COUNT(id)')
-                            ->from('t_sarana')
-                            ->whereColumn('desa_kel_id', 'dk.id');
-                    }, 'jumlah_sarana')
-                    ->selectSub(function ($query) {
-                        $query->selectRaw('COUNT(id)')
-                            ->from('t_kegiatan_olahraga')
-                            ->whereColumn('desa_kel_id', 'dk.id');
-                    }, 'jumlah_kegiatan_olahraga')
-                    ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id')
-                    ->paginate(10);
-
-        return view('transaksi.keolahragaan.index', compact('desaKelurahan', 'data'));
+        return view('transaksi.keolahragaan.index', compact('desaKelurahan', 'kecamatan'));
     }
 
     public function getLists(Request $request) {
@@ -63,6 +57,14 @@ class KeolahragaanController extends Controller
                 $query->where('kecamatan.nama', 'like', "%$search%")
                         ->orWhere('dk.nama', 'like', "%$search%");
             });
+        }
+
+        if (!empty($params['kecamatan'])) {
+            $query->where('dk.kecamatan_id', $params['kecamatan']);
+        }
+
+        if (!empty($params['desa_kelurahan'])) {
+            $query->where('dk.id', $params['desa_kelurahan']);
         }
 
         $start = $request->input('start', 0);
