@@ -738,21 +738,21 @@ $(function() {
         getImgRowById(row_id);
     });
 
-    $(".edit-sarana").click(function() {
+    $(document).on("click", ".edit-sarana", function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
 
-        console.log("Row ID => " + row_id)
+        console.log("Row ID => " + row_id);
         getSaranaRowById(row_id);
     });
 
-    $(".edit-prasarana").click(function() {
+    $(document).on("click", ".edit-prasarana", function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
         getPrasaranaRowById(row_id);
     });
 
-    $(".edit-kegiatan").click(function() {
+    $(document).on("click", ".edit-kegiatan", function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
         getKegiatanRowById(row_id);
@@ -910,7 +910,7 @@ $(function() {
                     render: function(data, type, row) {
                         return `
                             <div class="flex justify-center items-center">
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-prasarana" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-prasarana"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                 <a href="/transaksi/keolahragaan/prasarana/delete/${row.id}"
                                     class="flex items-center text-danger whitespace-nowrap mr-5"
@@ -984,7 +984,7 @@ $(function() {
                     render: function(data, type, row) {
                         return `
                             <div class="flex justify-center items-center">
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-kegiatan" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-kegiatan-olahraga"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                 <a href="/transaksi/keolahragaan/kegiatan-olahraga/delete/${row.id}"
                                     class="flex items-center text-danger whitespace-nowrap mr-5"
