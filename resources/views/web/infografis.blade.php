@@ -73,7 +73,7 @@
         <h5 class="mb-3">Ringkasan Data</h5>
         <div class="row mb-2">
             <div class="col-lg-3">
-                <div class="d-flex flex-column border mb-3 rounded-3">
+                <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
                         <h5>Kecamatan</h5>
                         <h3 id="kecamatan">0</h3>
@@ -81,30 +81,31 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-3">
-                <div class="d-flex flex-column border mb-3 rounded-3">
+                <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
                         <h5>Infrastruktur Olahraga</h5>
                         <h3 id="infrastruktur-keolahragaan">0</h3>
-                        <div class="form-text">Data Tahun 2023</div>
+                        <div class="form-text">Data Tahun 2024</div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
-                <div class="d-flex flex-column border mb-3 rounded-3">
+                <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
                         <h5>Kelompok Olahraga</h5>
                         <h3 id="kelompok-olahraga">0</h3>
-                        <div class="form-text">Data Tahun 2023</div>
+                        <div class="form-text">Data Tahun 2024</div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
-                <div class="d-flex flex-column border mb-3 rounded-3">
+                <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
                         <h5>Prestasi Atlet</h5>
                         <h3 id="prestasi-atlet">0</h3>
-                        <div class="form-text">Data Tahun 2023</div>
+                        <div class="form-text">Data Tahun 2024</div>
                     </div>
                 </div>
             </div>
