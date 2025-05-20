@@ -221,6 +221,26 @@ class OlahragaPrestasiController extends Controller
         return view('transaksi.olahraga-prestasi.detail', compact('prestasiKeolahragaan', 'prestasi', 'lisensi', 'desaKelurahan','cabangOlahraga'));
     }
 
+    public function update(Request $request) {
+        DB::table('t_prestasi_keolahragaan')
+            ->where('id', $request['id'])
+            ->update([
+                'nama' => $request['nama'],
+                'tempat_lahir' => $request['tempat_lahir'],
+                'tanggal_lahir' => $request['tanggal_lahir'],
+                'jenis_kelamin' => $request['jenis_kelamin'],
+                'desa_kelurahan_id' => $request['desa_kelurahan'],
+                'alamat_lengkap' => $request['alamat_lengkap'],
+                'organisasi_pembina' => $request['organisasi_pembina'],
+                'kategori' => $request['kategori'],
+                'cabang_olahraga_id' => $request['cabang_olahraga'],
+            ]);
+
+        return response()->json([
+            'message' => 'Data berhasil diperbarui.'
+        ]);
+    }
+
     public function saveDetail(Request $request) {
 
         if($request->keolahragaan_kategori == 1) {

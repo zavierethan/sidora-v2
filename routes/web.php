@@ -154,6 +154,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/save', [App\Http\Controllers\OlahragaPrestasiController::class, 'save'])->name('transaksi.olahraga-prestasi.save');
             Route::get('/create', [App\Http\Controllers\OlahragaPrestasiController::class, 'create'])->name('transaksi.olahraga-prestasi.create');
             Route::get('/detail/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'detail'])->name('transaksi.olahraga-prestasi.detail');
+            Route::post('/update', [App\Http\Controllers\OlahragaPrestasiController::class, 'update'])->name('transaksi.olahraga-prestasi.update');
             Route::post('/detail/save', [App\Http\Controllers\OlahragaPrestasiController::class, 'saveDetail'])->name('transaksi.olahraga-prestasi.detail.save');
             Route::get('/detail/delete/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'deleteDetail'])->name('transaksi.olahraga-prestasi.detail.delete');
             Route::get('/delete/{keolahragaanId}/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'delete'])->name('transaksi.olahraga-prestasi.delete');
@@ -168,6 +169,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/save', [App\Http\Controllers\OlahragaMasyarakatController::class, 'save'])->name('transaksi.olahraga-masyarakat.save');
             Route::get('/create', [App\Http\Controllers\OlahragaMasyarakatController::class, 'create'])->name('transaksi.olahraga-masyarakat.create');
             Route::get('/detail/{id}', [App\Http\Controllers\OlahragaMasyarakatController::class, 'detail'])->name('transaksi.olahraga-masyarakat.detail');
+            Route::post('/update', [App\Http\Controllers\OlahragaMasyarakatController::class, 'update'])->name('transaksi.olahraga-masyarakat.update');
             Route::post('/detail/save', [App\Http\Controllers\OlahragaMasyarakatController::class, 'saveDetail'])->name('transaksi.olahraga-masyarakat.detail.save');
             Route::post('/detail/delete/{id}', [App\Http\Controllers\OlahragaMasyarakatController::class, 'deleteDetail'])->name('transaksi.olahraga-masyarakat.detail.delete');
             Route::get('/delete/{keolahragaanId}/{id}', [App\Http\Controllers\OlahragaMasyarakatController::class, 'delete'])->name('transaksi.olahraga-masyarakat.delete');

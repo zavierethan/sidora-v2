@@ -17,6 +17,7 @@
                     <div class="form-inline">
                         <label for="input-wizard-2" class="sm:w-40 font-bold">Nama Lengkap</label>
                         <input type="text" class="form-control" name="nama" id="nama" value="{{$prestasiKeolahragaan->nama}}">
+                        <input type="hidden" class="form-control" name="id" id="id" value="{{$prestasiKeolahragaan->id}}">
                     </div>
                     <div class="form-inline mt-5">
                         <label for="input-wizard-2" class="sm:w-40 font-bold">Tempat Lahir</label>
@@ -50,7 +51,7 @@
                 <div class="intro-y col-span-12 sm:col-span-6 p-3">
                     <div class="form-inline">
                         <label for="horizontal-form-2" class="sm:w-40 font-bold">Organisasi Pembina</label>
-                        <select data-placeholder="Pilih Kategori Prestasi" class="tom-select w-full form-control" id="kategori" name="kategori" required>
+                        <select data-placeholder="Pilih Kategori Prestasi" class="tom-select w-full form-control" id="organisasi-pembina" name="organisasi_pembina" required>
                             <option value="KORMI">KORMI</option>
                         </select>
                     </div>
@@ -89,7 +90,7 @@
                 </div>
                 <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                     <a href="{{route('transaksi.olahraga-masyarakat.index')}}" class="btn btn-danger w-24 ml-2">Kembali</a>
-                    <button class="btn btn-primary w-24 ml-2" id="simpan">Perbaharui</button>
+                    <button class="btn btn-primary w-24 ml-2" id="update">Perbaharui</button>
                 </div>
             </div>
         </div>
@@ -121,7 +122,7 @@
                             <td>{{$item->tahun}}</td>
                             <td class="table-report__action">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.detail', ['id' => $item->id])}}"> <i
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href=""> <i
                                             data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.delete', ['keolahragaanId' => $prestasiKeolahragaan->id, 'id' => $item->id])}}" onclick="return confirm('Apakah anda yakin ?')"> <i
                                             data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -165,7 +166,7 @@
                             <td>{{$item->tahun}}</td>
                             <td class="table-report__action">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.detail', ['id' => $item->id])}}"> <i
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href=""> <i
                                             data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.delete', ['keolahragaanId' => $prestasiKeolahragaan->id, 'id' => $item->id])}}" onclick="return confirm('Apakah anda yakin ?')"> <i
                                             data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -290,6 +291,47 @@
 @section('script')
 <script>
 $(document).ready(function() {
+
+    $(document).on("click", "#update", function(e) {
+        e.preventDefault();
+
+        const payload = {
+            id: $("#id").val(),
+            nama: $("#nama").val(),
+            tempat_lahir: $("#tempat-lahir").val(),
+            tanggal_lahir: $("#tanggal-lahir").val(),
+            jenis_kelamin: $("#jenis-kelamin").val(),
+            desa_kelurahan: $("#desa-kelurahan").val(),
+            alamat_lengkap: $("#alamat-lengkap").val(),
+            organisasi_pembina: $("#organisasi-pembina").val(),
+            kategori: $("#kategori").val(),
+            induk_olahraga: $("#induk-olahraga").val(),
+            cabang_olahraga: $("#cabang-olahraga").val()
+        };
+
+        console.log("Sending data:", payload);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: `{{route('transaksi.olahraga-masyarakat.update')}}`,
+            type: 'POST',
+            data: payload,
+            success: function(response) {
+                alert("Data berhasil diperbarui.");
+            },
+            error: function(xhr, status, error) {
+                console.error("Update failed:", error);
+                alert("Gagal memperbarui data.");
+            }
+        });
+    });
+
+
     $('#foto-upload').on('change', function() {
         var id = {{$prestasiKeolahragaan->id}};
         var file = this.files[0];
