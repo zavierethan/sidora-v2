@@ -605,6 +605,7 @@ class KeolahragaanController extends Controller
 
         $query = DB::table('t_prasarana as tPrasarana')
                     ->select(
+                        'tPrasarana.id',
                         'mPrasrana.nama',
                         'tPrasarana.jumlah',
                         'mPrasrana.satuan',

@@ -25,7 +25,7 @@
                         <label for="vertical-form-1" class="sm:w-40 font-bold">Tahun</label>
                         <?php
                             $current_year = date('Y');
-                            $years_range = range($current_year - 5, $current_year + 5);
+                            $years_range = range($current_year + 5, $current_year - 5);
                         ?>
                         <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun"
                             name="tahun" required>
@@ -837,8 +837,11 @@ $(function() {
                                 <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-sarana"
                                         href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-sarana">
                                         <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
-                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                                <a href="/transaksi/keolahragaan/sarana/delete/${row.id}"
+                                    class="flex items-center text-danger whitespace-nowrap mr-5"
+                                    onclick="return confirm('Apakah anda yakin ?')">
+                                    <i data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete
+                                </a>
                             </div>
                         `;
                     }
@@ -909,8 +912,11 @@ $(function() {
                             <div class="flex justify-center items-center">
                                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
-                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                                <a href="/transaksi/keolahragaan/prasarana/delete/${row.id}"
+                                    class="flex items-center text-danger whitespace-nowrap mr-5"
+                                    onclick="return confirm('Apakah anda yakin ?')">
+                                    <i data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete
+                                </a>
                             </div>
                         `;
                     }
@@ -980,8 +986,11 @@ $(function() {
                             <div class="flex justify-center items-center">
                                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
                                         data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
-                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                                <a href="/transaksi/keolahragaan/kegiatan-olahraga/delete/${row.id}"
+                                    class="flex items-center text-danger whitespace-nowrap mr-5"
+                                    onclick="return confirm('Apakah anda yakin ?')">
+                                    <i data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete
+                                </a>
                             </div>
                         `;
                     }
