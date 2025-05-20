@@ -44,6 +44,25 @@ class DesaKelurahanController extends Controller
         return response()->json($response);
     }
 
+    public function getDataDesKelByKecamatanId($kecamatanId) {
+        $data = DB::table('m_desa_kelurahan')
+            ->select(
+                'm_desa_kelurahan.id',
+                'm_desa_kelurahan.nama',
+                'm_desa_kelurahan.kecamatan_id',
+                'm_desa_kelurahan.longitude',
+                'm_desa_kelurahan.latitude'
+            )
+            ->join('m_kecamatan', 'm_kecamatan.id', '=', 'm_desa_kelurahan.kecamatan_id')
+            ->where('m_desa_kelurahan.kecamatan_id', $kecamatanId)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
     public function edit($id) {
         $data = DB::table('m_desa_kelurahan')
             ->select('m_desa_kelurahan.id', 'm_desa_kelurahan.nama', 'm_desa_kelurahan.kecamatan_id', 'm_desa_kelurahan.longitude', 'm_desa_kelurahan.latitude')

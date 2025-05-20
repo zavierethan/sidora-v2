@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/save', [App\Http\Controllers\DesaKelurahanController::class, 'save'])->name('master.desa-kelurahan.save');
             Route::get('/edit/{id}', [App\Http\Controllers\DesaKelurahanController::class, 'edit'])->name('master.desa-kelurahan.edit');
             Route::post('/update', [App\Http\Controllers\DesaKelurahanController::class, 'update'])->name('master.desa-kelurahan.update');
+
+            Route::get('/by-kecamatan/{kecamatan_id}', [App\Http\Controllers\DesaKelurahanController::class, 'getDataDesKelByKecamatanId']);
         });
 
         Route::prefix('sarana')->group(function () {

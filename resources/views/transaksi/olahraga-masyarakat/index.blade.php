@@ -176,6 +176,32 @@
 <script>
 $(function() {
 
+    $('#f-kecamatan').change(function () {
+        const kecamatanId = $(this).val();
+
+        // 🧹 Clear Desa/Kelurahan select box lebih dulu
+        $('#f-desa-kelurahan').html('<option value="">Desa / Kelurahan</option>');
+
+        if (kecamatanId) {
+            $.ajax({
+                url: `/master/desa-kelurahan/by-kecamatan/${kecamatanId}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        let options = `<option value="">Desa / Kelurahan</option>`;
+                        response.data.forEach(function (item) {
+                            options += `<option value="${item.id}">${item.nama}</option>`;
+                        });
+                        $('#f-desa-kelurahan').html(options);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Gagal fetch desa/kelurahan:', error);
+                }
+            });
+        }
+    });
+
     $('#foto-upload').on('change', function() {
         var file = this.files[0];
 
