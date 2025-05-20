@@ -197,7 +197,7 @@
 $(document).ready(function() {
 
     $.ajax({
-        url: 'https://sidora.bandungkab.go.id/api/v1/infrastruktur-olahraga/get-summary-data-kelolahragaan',
+        url: '/api/v1/infrastruktur-olahraga/get-summary-data-kelolahragaan',
         method: 'GET',
         dataType: 'json',
             success: function(response) {
