@@ -16,6 +16,7 @@
                     <div class="form-inline">
                         <label class="sm:w-40 font-bold">Kecamatan</label>
                         <input type="text" class="form-control" value="{{ $wilayah->nama_kecamatan }}" readonly>
+                        <input type="hidden" class="form-control" value="{{ $wilayah->id }}" id="desa-kel-id">
                     </div>
                 </div>
 
@@ -26,10 +27,11 @@
                             $current_year = date('Y');
                             $years_range = range($current_year - 5, $current_year + 5);
                         ?>
-                        <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun" name="tahun" required>
+                        <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun"
+                            name="tahun" required>
                             <option value=" ">All</option>
                             @foreach($years_range as $year)
-                                <option value="{{ $year }}">{{ $year }}</option>
+                            <option value="{{ $year }}">{{ $year }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -45,12 +47,14 @@
             </div>
             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                 <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-danger w-24 ml-2">Kembali</a>
-                <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-success w-24 ml-2 text-white">Export</a>
+                <a href="/transaksi/keolahragaan/export/{{$wilayah->id}}"
+                    class="btn btn-success w-24 ml-2 text-white">Export</a>
             </div>
         </div>
     </div>
     <div class="intro-y box mt-5">
-        <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
+        <div
+            class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 px-5 sm:px-20">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
                 <h2 class="intro-y text-lg font-medium mt-10">Data sarana (Infrastruktur Keolahragaan)</h2>
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-sarana"
@@ -58,61 +62,27 @@
             </div>
         </div>
         <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
-            <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2 mb-10" id="data-sarana">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="whitespace-nowrap">Nama Sarana</th>
-                            <th class="whitespace-nowrap">Tipe Sarana</th>
-                            <th class="whitespace-nowrap">Status Kepemilikan</th>
-                            <th class="whitespace-nowrap">Nama Pemilik</th>
-                            <th class="whitespace-nowrap">Ukuran</th>
-                            <th class="whitespace-nowrap">Status Kondisi</th>
-                            <th class="whitespace-nowrap">Latitude</th>
-                            <th class="whitespace-nowrap">Longitude</th>
-                            <th class="whitespace-nowrap">Alamat</th>
-                            <th class="whitespace-nowrap">Tahun</th>
-                            <th class="whitespace-nowrap text-center">Foto Lokasi</th>
-                            <th class="whitespace-nowrap text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sarana-table-body">
-                        @foreach($tSarana as $sarana)
-                        <tr data-id="{{$sarana->id}}">
-                            <td>{{$sarana->nama}}</td>
-                            <td>{{$sarana->str_tipe_sarana}}</td>
-                            <td>{{$sarana->str_status_kepemilikan}}</td>
-                            <td>{{$sarana->nama_pemilik}}</td>
-                            <td>{{$sarana->ukuran}}</td>
-                            <td>{{$sarana->str_status_kondisi}}</td>
-                            <td>{{$sarana->lat}}</td>
-                            <td>{{$sarana->long}}</td>
-                            <td>{{$sarana->alamat}}</td>
-                            <td>{{$sarana->tahun}}</td>
-                            <td class="whitespace-nowrap text-center">
-                                @if($sarana->foto_lokasi_1 == null)
-                                -
-                                @else
-                                <a href="javascript:;" class="text-success view-img" data-tw-toggle="modal"
-                                    data-tw-target="#view-image">Klik untuk melihat gambar</a>
-                                @endif
-                            </td>
-                            <td class="table-report__action text-center">
-                                <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-sarana"
-                                        href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-sarana">
-                                        <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.sarana.delete', ['id' => $sarana->id])}}"
-                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
-                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
-                                            class="w-4 h-4 mr-1"></i> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <table class="table -mt-2 mb-5" id="data-sarana">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="whitespace-nowrap">Nama Sarana</th>
+                        <th class="whitespace-nowrap">Tipe Sarana</th>
+                        <th class="whitespace-nowrap">Status Kepemilikan</th>
+                        <th class="whitespace-nowrap">Nama Pemilik</th>
+                        <th class="whitespace-nowrap">Ukuran</th>
+                        <th class="whitespace-nowrap">Status Kondisi</th>
+                        <th class="whitespace-nowrap">Latitude</th>
+                        <th class="whitespace-nowrap">Longitude</th>
+                        <th class="whitespace-nowrap">Alamat</th>
+                        <th class="whitespace-nowrap">Tahun</th>
+                        <th class="whitespace-nowrap text-center">Foto Lokasi</th>
+                        <th class="whitespace-nowrap text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sarana-table-body">
+
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -126,45 +96,22 @@
             </div>
         </div>
         <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
-            <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2 mb-10">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="whitespace-nowrap">Nama Prasrana</th>
-                            <th class="whitespace-nowrap text-center">Jumlah</th>
-                            <th class="whitespace-nowrap">Satuan</th>
-                            <th class="whitespace-nowrap text-center">Status Layak</th>
-                            <th class="whitespace-nowrap text-center">Hibah Pemerintah</th>
-                            <th class="whitespace-nowrap">Tahun</th>
-                            <th class="whitespace-nowrap text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="prasarana-table-body">
-                        @foreach($tPrasarana as $prasarana)
-                        <tr data-id="{{$prasarana->id}}">
-                            <td>{{$prasarana->nama}}</td>
-                            <td class="text-center">{{$prasarana->jumlah}}</td>
-                            <td>{{$prasarana->satuan}}</td>
-                            <td class="text-center">{{$prasarana->str_status_layak}}</td>
-                            <td class="text-center">{{$prasarana->hibah_pemerintah}}</td>
-                            <td>{{$prasarana->tahun}}</td>
-                            <td class="table-report__action text-center">
-                                <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-prasarana"
-                                        href="javascript:;" data-tw-toggle="modal"
-                                        data-tw-target="#form-edit-prasarana"> <i data-lucide="edit"
-                                            class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.prasarana.delete', ['id' => $prasarana->id])}}"
-                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
-                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
-                                            class="w-4 h-4 mr-1"></i> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <table class="table -mt-2" id="data-prasarana">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="whitespace-nowrap">Nama Prasrana</th>
+                        <th class="whitespace-nowrap">Jumlah</th>
+                        <th class="whitespace-nowrap">Satuan</th>
+                        <th class="whitespace-nowrap">Status Layak</th>
+                        <th class="whitespace-nowrap">Hibah Pemerintah</th>
+                        <th class="whitespace-nowrap">Tahun</th>
+                        <th class="whitespace-nowrap text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="prasarana-table-body">
+
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -178,47 +125,22 @@
             </div>
         </div>
         <div class="px-5 sm:px-20 mt-6 pt-6 border-t border-slate-200/60 dark:border-darkmode-400">
-            <div class="grid grid-cols-12 gap-4 gap-y-5">
-                <table class="table table-report col-span-12 -mt-2 mb-10">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="whitespace-nowrap">Cabang olahraga</th>
-                            <th class="whitespace-nowrap">Nama Kelompok (Klub)</th>
-                            <th class="whitespace-nowrap">Nama Ketua Klub</th>
-                            <th class="whitespace-nowrap text-center">Jumlah Anggota</th>
-                            <th class="whitespace-nowrap text-center">Terverifikasi</th>
-                            <th class="whitespace-nowrap">Nomor SK</th>
-                            <th class="whitespace-nowrap">Alamat Sekretariat</th>
-                            <th class="whitespace-nowrap text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="kegitaan-olahraga-table-body">
-                        @foreach($tKegiatanOlahraga as $kegiatanOlahRaga)
-                        <tr data-id="{{$kegiatanOlahRaga->id}}">
-                            <td>{{$kegiatanOlahRaga->nama}}</td>
-                            <td>{{$kegiatanOlahRaga->nama_kelompok}}</td>
-                            <td>{{$kegiatanOlahRaga->nama_ketua_kelompok}}</td>
-                            <td class="text-center">{{$kegiatanOlahRaga->jumlah_anggota}}</td>
-                            <td class="text-center">{{$kegiatanOlahRaga->str_terverifikasi}}</td>
-                            <td>{{$kegiatanOlahRaga->nomor_sk}}</td>
-                            <td>{{$kegiatanOlahRaga->alamat_sekretariat}}</td>
-                            <td class="table-report__action text-center">
-                                <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-kegiatan"
-                                        href="javascript:;" data-tw-toggle="modal"
-                                        data-tw-target="#form-edit-kegiatan-olahraga"> <i data-lucide="edit"
-                                            class="w-4 h-4 mr-1"></i> Edit </a>
-                                    <a href="{{route('transaksi.keolahragaan.kegiatan-olahraga.delete', ['id' => $kegiatanOlahRaga->id])}}"
-                                        class="flex items-center text-danger whitespace-nowrap mr-5" href=""
-                                        onclick="return confirm('Apakah anda yakin ?')"> <i data-lucide="trash"
-                                            class="w-4 h-4 mr-1"></i> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <table class="table -mt-2" id="data-kegiatan-olahraga">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="whitespace-nowrap">Cabang olahraga</th>
+                        <th class="whitespace-nowrap">Nama Kelompok (Klub)</th>
+                        <th class="whitespace-nowrap">Nama Ketua Klub</th>
+                        <th class="whitespace-nowrap">Jumlah Anggota</th>
+                        <th class="whitespace-nowrap">Terverifikasi</th>
+                        <th class="whitespace-nowrap">Nomor SK</th>
+                        <th class="whitespace-nowrap">Alamat Sekretariat</th>
+                        <th class="whitespace-nowrap text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="kegitaan-olahraga-table-body">
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -796,6 +718,20 @@
 <script>
 $(function() {
 
+    var desaKelId = $("#desa-kel-id").val();
+
+    getSarana(desaKelId, '');
+    getPrasarana(desaKelId, '');
+    getKegiatanOlahraga(desaKelId, '');
+
+    $("#tahun").change(function() {
+        let tahun = $(this).val();
+
+        getSarana(desaKelId, tahun);
+        getPrasarana(desaKelId, tahun);
+        // getKegiatanOlahraga(desaKelId, tahun);
+    });
+
     $(".view-img").click(function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
@@ -805,6 +741,8 @@ $(function() {
     $(".edit-sarana").click(function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
+
+        console.log("Row ID => " + row_id)
         getSaranaRowById(row_id);
     });
 
@@ -819,6 +757,241 @@ $(function() {
         var row_id = row.attr('data-id');
         getKegiatanRowById(row_id);
     });
+
+    function getSarana(id, tahun) {
+
+        if ($.fn.DataTable.isDataTable('#data-sarana')) {
+            $('#data-sarana').DataTable().destroy();
+        }
+
+        $("#data-sarana").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            lengthChange: false,
+            paging: true, // Enable pagination
+            pageLength: 10, // Number of rows per page
+            ajax: {
+                url: `/transaksi/keolahragaan/sarana/get-lists`, // Replace with your route
+                type: 'GET',
+                data: function(d) {
+                    d.desa_kelurahan = id;
+                    d.tahun = tahun;
+                },
+                dataSrc: function(json) {
+                    return json.data; // Map the 'data' field
+                }
+            },
+            columns: [{
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'str_tipe_sarana',
+                    name: 'str_tipe_sarana'
+                },
+                {
+                    data: 'str_status_kepemilikan',
+                    name: 'str_status_kepemilikan',
+                },
+                {
+                    data: 'nama_pemilik',
+                    name: 'nama_pemilik',
+                },
+                {
+                    data: 'ukuran',
+                    name: 'ukuran',
+                },
+                {
+                    data: 'str_status_kondisi',
+                    name: 'str_status_kondisi',
+                },
+                {
+                    data: 'lat',
+                    name: 'lat',
+                },
+                {
+                    data: 'long',
+                    name: 'long',
+                },
+                {
+                    data: 'alamat',
+                    name: 'alamat',
+                },
+                {
+                    data: 'ukuran',
+                    name: 'ukuran',
+                },
+                {
+                    data: 'tahun',
+                    name: 'tahun',
+                },
+                {
+                    data: null, // No direct field from the server
+                    name: 'action',
+                    orderable: false, // Disable ordering for this column
+                    searchable: false, // Disable searching for this column
+                    render: function(data, type, row) {
+                        return `
+                            <div class="flex justify-center items-center">
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-sarana"
+                                        href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-sarana">
+                                        <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
+                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            createdRow: function(row, data, dataIndex) {
+                // Add data-id attribute from your data source (assuming `id` field exists)
+                $(row).attr('data-id', data.id);
+            }
+        });
+    }
+
+    function getPrasarana(id, tahun) {
+
+        if ($.fn.DataTable.isDataTable('#data-prasarana')) {
+            $('#data-prasarana').DataTable().destroy();
+        }
+
+        $("#data-prasarana").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            lengthChange: false,
+            paging: true, // Enable pagination
+            pageLength: 10, // Number of rows per page
+            ajax: {
+                url: `/transaksi/keolahragaan/prasarana/get-lists`, // Replace with your route
+                type: 'GET',
+                data: function(d) {
+                    d.desa_kelurahan = id;
+                    d.tahun = tahun;
+                },
+                dataSrc: function(json) {
+                    return json.data; // Map the 'data' field
+                }
+            },
+            columns: [{
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'jumlah',
+                    name: 'jumlah'
+                },
+                {
+                    data: 'satuan',
+                    name: 'satuan',
+                },
+                {
+                    data: 'str_status_layak',
+                    name: 'str_status_layak',
+                },
+                {
+                    data: 'hibah_pemerintah',
+                    name: 'hibah_pemerintah',
+                },
+                {
+                    data: 'tahun',
+                    name: 'tahun',
+                },
+                {
+                    data: null, // No direct field from the server
+                    name: 'action',
+                    orderable: false, // Disable ordering for this column
+                    searchable: false, // Disable searching for this column
+                    render: function(data, type, row) {
+                        return `
+                            <div class="flex justify-center items-center">
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
+                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
+                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            createdRow: function(row, data, dataIndex) {
+                // Add data-id attribute from your data source (assuming `id` field exists)
+                $(row).attr('data-id', data.id);
+            }
+        });
+    }
+
+    function getKegiatanOlahraga(id, tahun) {
+        $("#data-kegiatan-olahraga").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            lengthChange: false,
+            paging: true, // Enable pagination
+            pageLength: 10, // Number of rows per page
+            ajax: {
+                url: `/transaksi/keolahragaan/kegiatan-olahraga/get-lists`, // Replace with your route
+                type: 'GET',
+                data: function(d) {
+                    d.desa_kelurahan = id;
+                    d.tahun = tahun;
+                },
+                dataSrc: function(json) {
+                    return json.data; // Map the 'data' field
+                }
+            },
+            columns: [{
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'nama_kelompok',
+                    name: 'nama_kelompok'
+                },
+                {
+                    data: 'nama_ketua_kelompok',
+                    name: 'nama_ketua_kelompok'
+                },
+                {
+                    data: 'jumlah_anggota',
+                    name: 'jumlah_anggota',
+                },
+                {
+                    data: 'str_terverifikasi',
+                    name: 'str_terverifikasi',
+                },
+                {
+                    data: 'nomor_sk',
+                    name: 'nomor_sk',
+                },
+                {
+                    data: 'alamat_sekretariat',
+                    name: 'alamat_sekretariat',
+                },
+                {
+                    data: null, // No direct field from the server
+                    name: 'action',
+                    orderable: false, // Disable ordering for this column
+                    searchable: false, // Disable searching for this column
+                    render: function(data, type, row) {
+                        return `
+                            <div class="flex justify-center items-center">
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/detail/${row.id}"> <i
+                                        data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
+                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="/transaksi/keolahragaan/export/${row.id}"> <i
+                                        data-lucide="file-text" class="w-4 h-4 mr-1"></i> Delete</a>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            createdRow: function(row, data, dataIndex) {
+                $(row).attr('data-id', data.id);
+            }
+        });
+    }
 
     function getImgRowById(id) {
 
@@ -982,7 +1155,7 @@ $(function() {
 
                 $("#form-edit-kegiatan-olahraga .nama_kelompok").val(data.nama_kelompok);
                 $("#form-edit-kegiatan-olahraga .nama_ketua_kelompok").val(data
-                .nama_ketua_kelompok);
+                    .nama_ketua_kelompok);
                 $("#form-edit-kegiatan-olahraga .jumlah_anggota").val(data.jumlah_anggota);
 
                 const terverifikasi = $("#form-edit-kegiatan-olahraga .terverifikasi")[0].tomselect;

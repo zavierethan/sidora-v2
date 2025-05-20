@@ -546,4 +546,139 @@ class KeolahragaanController extends Controller
         DB::table('t_prestasi_olahraga')->where('id', $id)->delete();
         return redirect()->back();
     }
+
+    public function saranaGetLists(Request $request) {
+        $params = $request->all();
+
+        $query = DB::table('t_sarana as tSarana')
+                ->select(
+                    'tSarana.id',
+                    'mSarana.nama',
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.tipe_sarana = '1' THEN 'Indoor' ELSE 'Outdoor'
+                        END AS str_tipe_sarana"
+                    ),
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.status_kepemilikan = '1' THEN 'Pribadi' ELSE 'Pemerintah'
+                        END AS str_status_kepemilikan"
+                    ),
+                    'tSarana.nama_pemilik',
+                    'tSarana.ukuran',
+                    'tSarana.lat',
+                    'tSarana.long',
+                    'tSarana.alamat',
+                    'tSarana.tahun',
+                    DB::raw("
+                        CASE
+                            WHEN tSarana.status_kondisi = '1' THEN 'Layak Pakai' ELSE 'Tidak Layak Pakai'
+                        END AS str_status_kondisi"
+                    )
+                )
+                ->leftJoin('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
+                ->where('tSarana.desa_kel_id', $params['desa_kelurahan']);
+
+        if (!empty($params['tahun'])) {
+            $query->where('tSarana.tahun', $params['tahun']);
+        }
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $totalRecords = $query->count();
+        $filteredRecords = $query->count();
+        $data = $query->skip($start)->take($length)->get();
+
+        $response = [
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ];
+
+        return response()->json($response);
+    }
+
+    public function prasaranaGetLists(Request $request) {
+        $params = $request->all();
+
+        $query = DB::table('t_prasarana as tPrasarana')
+                    ->select(
+                        'mPrasrana.nama',
+                        'tPrasarana.jumlah',
+                        'mPrasrana.satuan',
+                        DB::raw("
+                            CASE
+                                WHEN tPrasarana.status_layak = '1' THEN 'Ya' ELSE 'Tidak'
+                            END AS str_status_layak"
+                        ),
+                        DB::raw("
+                            CASE
+                                WHEN tPrasarana.hibah_pemerintah = '1' THEN 'Ya' ELSE 'Tidak'
+                            END AS hibah_pemerintah"
+                        ),
+                        'tPrasarana.tahun'
+                    )
+                    ->join('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
+                    ->where('tPrasarana.desa_kel_id', $params['desa_kelurahan']);
+
+        if (!empty($params['tahun'])) {
+            $query->where('tPrasarana.tahun', $params['tahun']);
+        }
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $totalRecords = $query->count();
+        $filteredRecords = $query->count();
+        $data = $query->skip($start)->take($length)->get();
+
+        $response = [
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ];
+
+        return response()->json($response);
+    }
+
+    public function kegiatanOlahragaGetLists(Request $request) {
+        $params = $request->all();
+
+        $query = DB::table('t_kegiatan_olahraga as tKegiatanOlahraga')
+                ->select(
+                    'tKegiatanOlahraga.id',
+                    'mCabor.nama',
+                    'tKegiatanOlahraga.nama_kelompok',
+                    'tKegiatanOlahraga.nama_ketua_kelompok',
+                    'tKegiatanOlahraga.jumlah_anggota',
+                    DB::raw("
+                        CASE
+                            WHEN tKegiatanOlahraga.terverifikasi = '1' THEN 'Ya' ELSE 'Tidak'
+                        END AS str_terverifikasi"
+                    ),
+                    'tKegiatanOlahraga.nomor_sk',
+                    'tKegiatanOlahraga.alamat_sekretariat',
+                )
+                ->leftJoin('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
+                ->where('tKegiatanOlahraga.desa_kel_id', $params['desa_kelurahan']);
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $totalRecords = $query->count();
+        $filteredRecords = $query->count();
+        $data = $query->skip($start)->take($length)->get();
+
+        $response = [
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ];
+
+        return response()->json($response);
+    }
 }

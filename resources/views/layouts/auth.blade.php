@@ -10,14 +10,14 @@
         <meta name="author" content="LEFT4CODE">
         <title>Sidora V2 - Dispora Kabupuaten Bandung</title>
         <!-- BEGIN: CSS Assets-->
-        <link rel="stylesheet" href="https://sidora.bandungkab.go.id/assets/css/app.css" />
+        <link rel="stylesheet" href="{{asset('assets/css/app.css')}}" />
         <!-- END: CSS Assets-->
     </head>
     <!-- END: Head -->
     <body class="login">
         @yield('content')
         <!-- BEGIN: JS Assets-->
-        <script src="https://sidora.bandungkab.go.id/assets/js/app.js"></script>
+        <script src="{{asset('assets/js/app.js')}}"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <!-- END: JS Assets-->
 
