@@ -237,6 +237,7 @@
 
 @section('script')
 <script>
+
 $.ajax({
     url: '/api/v1/infrastruktur-olahraga/get-total-sarana',
     method: 'GET',
@@ -258,6 +259,20 @@ $.ajax({
     success: function(response) {
         // Handle the response data
         $('#kelompok-olahraga').text(response.data.total_kelompok_olahraga);
+    },
+    error: function(xhr, status, error) {
+        // Handle errors
+        console.error(status, error);
+    }
+});
+
+$.ajax({
+    url: '/api/v1/olahraga-prestasi/get-total-summary',
+    method: 'GET',
+    dataType: 'json',
+    success: function(response) {
+        // Handle the response data
+        $('#prestasi-atlet').text(response.data);
     },
     error: function(xhr, status, error) {
         // Handle errors

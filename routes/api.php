@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('olahraga-prestasi')->group(function () {
         Route::get('/get-summary-data-koni', [App\Http\Controllers\API\OlahragaPrestasiController::class, 'getSummaryDataKONI']);
         Route::get('/get-summary-data-npci', [App\Http\Controllers\API\OlahragaPrestasiController::class, 'getSummaryDataNPCI']);
+        Route::get('/get-total-summary', [App\Http\Controllers\API\OlahragaPrestasiController::class, 'getSummaryTotalOlahragaPrestasi']);
         Route::get('/get-data-olahraga-prestasi-group-by-desa-kelurahan', [App\Http\Controllers\API\OlahragaPrestasiController::class, 'getDataOlahragaPrestasiGroupByDesaKelurahan'])->name('get-data-olahraga-prestasi-group-by-desa-kelurahan');
     });
 

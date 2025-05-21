@@ -60,7 +60,6 @@
                 <p class="text-white mb-4 animated slideInRight">Data sarana , prasarana, kegiatan keolahragaan dan Prestasi Keolahragaan di Kabupaten Bandung</p>
             </div>
             <div class="col-lg-6 align-self-end text-center text-lg-end">
-                <img class="img-fluid" src="img/hero-img.png" alt="" style="max-height: 300px;">
             </div>
         </div>
     </div>
@@ -239,6 +238,20 @@ $(document).ready(function() {
                 // Handle errors
                 console.error(status, error);
             }
+    });
+
+    $.ajax({
+        url: '/api/v1/olahraga-prestasi/get-total-summary',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            // Handle the response data
+            $('#prestasi-atlet').text(response.data);
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.error(status, error);
+        }
     });
 
     $.ajax({

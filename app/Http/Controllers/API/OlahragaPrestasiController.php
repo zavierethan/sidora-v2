@@ -11,7 +11,7 @@ class OlahragaPrestasiController extends Controller
     public function getSummaryDataKONI() {
 
         $data = DB::select("
-                    SELECT 
+                    SELECT
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 1 AND organisasi_pembina = 'KONI') AS jumlah_atlet,
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 2 AND organisasi_pembina = 'KONI') AS jumlah_pelatih,
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 3 AND organisasi_pembina = 'KONI') AS jumlah_wasit"
@@ -25,11 +25,22 @@ class OlahragaPrestasiController extends Controller
     public function getSummaryDataNPCI() {
 
         $data = DB::select("
-                    SELECT 
+                    SELECT
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 1 AND organisasi_pembina = 'NPCI') AS jumlah_atlet,
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 2 AND organisasi_pembina = 'NPCI') AS jumlah_pelatih,
                     (SELECT COUNT(*) FROM t_prestasi_keolahragaan WHERE kategori = 3 AND organisasi_pembina = 'NPCI') AS jumlah_wasit"
                 );
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function getSummaryTotalOlahragaPrestasi() {
+
+        $data = DB::table('t_prestasi_keolahragaan')
+            ->whereIn('organisasi_pembina', ['NPCI', 'KONI'])
+            ->count();
 
         return response()->json([
             "data" => $data
@@ -52,7 +63,7 @@ class OlahragaPrestasiController extends Controller
                     ->groupBy('desa_kelurahan.nama')
                     ->orderBy('desa_kelurahan.nama')
                     ->get();
-    
+
         $categories = [];
         $series = [
             [
@@ -68,7 +79,7 @@ class OlahragaPrestasiController extends Controller
                 'data' => [],
             ],
         ];
-    
+
         // Loop through the retrieved data to structure it into the desired format
         foreach ($chartData as $data) {
             $categories[] = $data->nama_desa_kelurahan;
@@ -76,13 +87,13 @@ class OlahragaPrestasiController extends Controller
             $series[1]['data'][] = (int)$data->jumlah_pelatih;
             $series[2]['data'][] = (int)$data->jumlah_wasit;
         }
-    
+
         $jsonData = [
             'categories' => $categories,
             'series' => $series,
         ];
-    
+
         return response()->json($jsonData, 200);
     }
-    
+
 }
