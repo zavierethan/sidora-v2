@@ -74,9 +74,8 @@
             <div class="col-lg-3">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Kecamatan</h5>
                         <h3 id="kecamatan">0</h3>
-                        <div class="form-text">Data Tahun 2023</div>
+                        <h6 class="font-weight-bold">Kecamatan</h6>
                     </div>
                 </div>
             </div>
@@ -84,27 +83,24 @@
             <div class="col-lg-3">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Infrastruktur Olahraga</h5>
                         <h3 id="infrastruktur-keolahragaan">0</h3>
-                        <div class="form-text">Data Tahun 2024</div>
+                        <h6 class="font-weight-bold">Infrastruktur Olahraga</h6>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Kelompok Olahraga</h5>
                         <h3 id="kelompok-olahraga">0</h3>
-                        <div class="form-text">Data Tahun 2024</div>
+                        <h6 class="font-weight-bold">Kelompok Olahraga</h6>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Prestasi Atlet</h5>
                         <h3 id="prestasi-atlet">0</h3>
-                        <div class="form-text">Data Tahun 2024</div>
+                        <h6 class="font-weight-bold">Prestasi Atlet</h6>
                     </div>
                 </div>
             </div>
@@ -124,7 +120,7 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Kecamatan</label>
                         <select class="form-control" id="slc-kecamatan">
-                            <option value=" " selected>-</option>
+                            <option value=" ">All</option>
                             @foreach($wilayah as $wil)
                             <option value="{{$wil->id}}"><?php echo ucfirst(strtolower($wil->nama)); ?></option>
                             @endforeach
@@ -137,7 +133,8 @@
                             $years_range = range($current_year - 5, $current_year + 5);
                         ?>
                         <select placeholder="Pilih Tahun" class="tom-select w-full form-control"
-                            id="tahun" name="tahun" required>
+                            id="slc-tahun" name="tahun" required>
+                            <option value=" ">All</option>
                             @foreach($years_range as $year)
                             <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
                             @endforeach
@@ -175,27 +172,13 @@
 <script>
 $(document).ready(function() {
 
-    renderChart(categories = [], data = []);
+    // renderChart(categories = [], data = []);
+    getChartData("", "")
 
-    $("#slc-kecamatan").change(function() {
-        var kecamatan_id = $(this).val();
-        $.ajax({
-            url: "{{ route('get-fasilitas-per-desa-kelurahan-filter-by-kecamatan') }}",
-            method: 'GET',
-            data: { kecamatan_id: kecamatan_id }, // Include data in the request
-            dataType: 'json',
-            success: function(response) {
-                // Handle the response data
-                var categories = response.data.map(item => item.nama_sarana);
-                var data = response.data.map(item => item.jumlah);
-
-                renderChart(categories, data);
-            },
-            error: function(xhr, status, error) {
-                // Handle errors
-                console.error(status, error);
-            }
-        });
+    $(document).on("change", "#slc-kecamatan, #slc-tahun", function() {
+        var kecamatan_id = $('#slc-kecamatan').val();
+        var tahun = $('#slc-tahun').val();
+        getChartData(kecamatan_id, tahun)
     });
 
     $.ajax({
@@ -331,6 +314,26 @@ function renderChart(categories, data) {
             name: 'Jumlah Fasilitas ',
             data: data
         }]
+    });
+}
+
+function getChartData(kecamatan_id, tahun) {
+    $.ajax({
+        url: "{{ route('get-fasilitas-per-desa-kelurahan-filter-by-kecamatan') }}",
+        method: 'GET',
+        data: { kecamatan_id: kecamatan_id, tahun: tahun }, // Include data in the request
+        dataType: 'json',
+        success: function(response) {
+            // Handle the response data
+            var categories = response.data.map(item => item.nama_sarana);
+            var data = response.data.map(item => item.jumlah);
+
+            renderChart(categories, data);
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.error(status, error);
+        }
     });
 }
 

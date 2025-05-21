@@ -75,18 +75,16 @@
             <div class="col-lg-6">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Jumlah Atlet</h5>
                         <h3 id="kormi-atlet">0</h3>
-                        <div class="form-text">Data Tahun 2024</div>
+                        <h6 class="font-weight-bold">Jumlah Atlet</h6>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="d-flex flex-column border mb-3 rounded-3 justify-content-center align-items-center text-center">
                     <div class="p-2">
-                        <h5>Jumlah Pelatih</h5>
                         <h3 id="kormi-pelatih">0</h3>
-                        <div class="form-text">Data Tahun 2024</div>
+                        <h6 class="font-weight-bold">Jumlah Pelatih</h6>
                     </div>
                 </div>
             </div>

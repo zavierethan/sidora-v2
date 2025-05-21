@@ -78,17 +78,17 @@
                         <h5>KONI</h5>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="koni-atlet" class="text-center">0</h3>
-                            <div class="p-2">Atlet</div>
+                            <h6 class="font-weight-bold p-2">Atlet</h6>
                         </div>
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="koni-pelatih" class="text-center">0</h3>
-                            <div class="p-2">Pelatih</div>
+                            <h6 class="font-weight-bold p-2">Pelatih</h6>
                         </div>
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="koni-wasit" class="text-center">0</h3>
-                            <div class="p-2">Wasit - Juri</div>
+                            <h6 class="font-weight-bold p-2">Wasit - Juri</h6>
                         </div>
                     </div>
                 </div>
@@ -99,17 +99,17 @@
                         <h5>NPCI</h5>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="npci-atlet" class="text-center">0</h3>
-                            <div class="p-2">Atlet</div>
+                            <h6 class="font-weight-bold p-2">Atlet</h6>
                         </div>
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="npci-pelatih" class="text-center">0</h3>
-                            <div class="p-2">Pelatih</div>
+                            <h6 class="font-weight-bold p-2">Pelatih</h6>
                         </div>
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-2">
                             <h3 id="npci-wasit" class="text-center">0</h3>
-                            <div class="p-2">Wasit - Juri</div>
+                            <h6 class="font-weight-bold p-2">Wasit - Juri</h6>
                         </div>
                     </div>
                 </div>

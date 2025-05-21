@@ -34,7 +34,7 @@ class WebController extends Controller
     }
 
     public function galeri() {
-        $data = DB::table('t_galeri_kegiatan')->get();
+        $data = DB::table('t_galeri_kegiatan')->paginate(6);
         return view ('web.galeri', compact('data'));
     }
 }

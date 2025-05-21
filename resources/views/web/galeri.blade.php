@@ -27,13 +27,16 @@
                 <div class="case-item position-relative overflow-hidden rounded mb-2">
                     <img class="img-fluid" src="data:image/png;base64,{{$item->content}}" alt="" style="width: 600px; height: 500px;">
                     <a class="case-overlay text-decoration-none" href="">
-                        <small>Robotic Automation</small>
-                        <h5 class="lh-base text-white mb-3">{{$item->title}}
-                        </h5>
+                        <h5 class="lh-base text-white mb-3">{{$item->title}}</h5>
                     </a>
                 </div>
             </div>
             @endforeach
+        </div>
+
+        <!-- Centered Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $data->links('pagination::bootstrap-4') }}
         </div>
     </div>
 </div>

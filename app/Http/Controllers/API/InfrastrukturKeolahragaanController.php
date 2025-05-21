@@ -9,7 +9,7 @@ use DB;
 class InfrastrukturKeolahragaanController extends Controller
 {
     public function getTotalKecamatan() {
-        
+
         $data = DB::table('m_kecamatan')->count();
 
         return response()->json([
@@ -22,7 +22,7 @@ class InfrastrukturKeolahragaanController extends Controller
     public function getTotalSarana() {
 
         $data = DB::table('t_sarana')->count();
-        
+
         return response()->json([
             "data" => [
                 "total_sarana" => $data
@@ -33,7 +33,7 @@ class InfrastrukturKeolahragaanController extends Controller
     public function getTotalKelompokOlahraga() {
 
         $data = DB::table('t_kegiatan_olahraga')->count();
-        
+
         return response()->json([
             "data" => [
                 "total_kelompok_olahraga" => $data
@@ -48,7 +48,7 @@ class InfrastrukturKeolahragaanController extends Controller
                 kecamatan.latitude,
                 kecamatan.longitude,
                 SUM( subquery.sarana ) AS sarana,
-                SUM( subquery.kegiatan_olahraga ) AS kelompok_olahraga 
+                SUM( subquery.kegiatan_olahraga ) AS kelompok_olahraga
             FROM
                 (
                 SELECT
@@ -56,12 +56,12 @@ class InfrastrukturKeolahragaanController extends Controller
                     dk.nama AS nama_desa_kelurahan,
                     kecamatan.id AS kecamatan_id,
                     ( SELECT COUNT( id ) FROM t_sarana WHERE desa_kel_id = dk.id ) AS sarana,
-                    ( SELECT COUNT( id ) FROM t_kegiatan_olahraga WHERE desa_kel_id = dk.id ) AS kegiatan_olahraga 
+                    ( SELECT COUNT( id ) FROM t_kegiatan_olahraga WHERE desa_kel_id = dk.id ) AS kegiatan_olahraga
                 FROM
                     m_desa_kelurahan AS dk
-                    JOIN m_kecamatan AS kecamatan ON kecamatan.id = dk.kecamatan_id 
+                    JOIN m_kecamatan AS kecamatan ON kecamatan.id = dk.kecamatan_id
                 ) AS subquery
-                JOIN m_kecamatan AS kecamatan ON kecamatan.id = subquery.kecamatan_id 
+                JOIN m_kecamatan AS kecamatan ON kecamatan.id = subquery.kecamatan_id
             GROUP BY
                 kecamatan.nama, kecamatan.latitude, kecamatan.longitude");
 
@@ -71,17 +71,22 @@ class InfrastrukturKeolahragaanController extends Controller
     }
 
     public function getFasilitasPerDesaKelurahanFilterByKecamatan(Request $request) {
-        
-        $data = DB::select("
-                    SELECT
-                        mSarana.nama AS nama_sarana,
-                        COUNT(tSarana.id) AS jumlah
-                    FROM m_desa_kelurahan AS dk
-                    LEFT JOIN t_sarana AS tSarana ON tSarana.desa_kel_id = dk.id
-                    RIGHT JOIN m_sarana AS mSarana ON tSarana.sarana_id = mSarana.id
-                    WHERE dk.kecamatan_id = ? AND tSarana.sarana_id IN (18, 1, 5, 14, 4, 2, 17, 3, 6)
-                    GROUP BY mSarana.nama", [$request->kecamatan_id]);
-        
+        $query = DB::table('m_sarana as mSarana')
+            ->select('mSarana.nama as nama_sarana', DB::raw('COUNT(tSarana.id) as jumlah'))
+            ->leftJoin('t_sarana as tSarana', 'tSarana.sarana_id', '=', 'mSarana.id')
+            ->leftJoin('m_desa_kelurahan as dk', 'tSarana.desa_kel_id', '=', 'dk.id')
+            ->whereIn('tSarana.sarana_id', [18, 1, 5, 14, 4, 2, 17, 3, 6]);
+
+        if (!empty($request->kecamatan_id)) {
+            $query->where('dk.kecamatan_id', $request->kecamatan_id);
+        }
+
+        if (!empty($request->tahun)) {
+            $query->where('tSarana.tahun', $request->tahun);
+        }
+
+        $data = $query->groupBy('mSarana.nama')->get();
+
         return response()->json([
             "data" => $data
         ], 200);
