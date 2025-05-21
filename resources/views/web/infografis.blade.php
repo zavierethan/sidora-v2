@@ -131,6 +131,19 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Tahun</label>
+                        <?php
+                            $current_year = date('Y');
+                            $years_range = range($current_year - 5, $current_year + 5);
+                        ?>
+                        <select placeholder="Pilih Tahun" class="tom-select w-full form-control"
+                            id="tahun" name="tahun" required>
+                            @foreach($years_range as $year)
+                            <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                            @endforeach
+                        </select>
+                    </div>
                     <!-- <button type="submit" class="col-12 btn btn-primary ">Pratinjau</button> -->
                 </form>
             </div>

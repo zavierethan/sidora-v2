@@ -161,6 +161,12 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('/detail/delete/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'deleteDetail'])->name('transaksi.olahraga-prestasi.detail.delete');
             Route::get('/delete/{keolahragaanId}/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'delete'])->name('transaksi.olahraga-prestasi.delete');
 
+            Route::post('/detail/prestasi', [App\Http\Controllers\OlahragaPrestasiController::class, 'getPrestasiById'])->name('transaksi.olahraga-prestasi.get-prestasi');
+            Route::post('/detail/lisensi', [App\Http\Controllers\OlahragaPrestasiController::class, 'getLisensiById'])->name('transaksi.olahraga-prestasi.get-lisensi');
+
+            Route::post('/detail/prestasi/update', [App\Http\Controllers\OlahragaPrestasiController::class, 'updatePrestasi'])->name('transaksi.olahraga-prestasi.detail.update-prestasi');
+            Route::post('/detail/lisensi/update', [App\Http\Controllers\OlahragaPrestasiController::class, 'updateLisensi'])->name('transaksi.olahraga-prestasi.detail.update-lisensi');
+
             Route::get('/export', [App\Http\Controllers\OlahragaPrestasiController::class, 'export'])->name('transaksi.olahraga-prestasi.export');
             Route::post('/upload-foto', [App\Http\Controllers\OlahragaPrestasiController::class, 'uploadFoto'])->name('transaksi.olahraga-prestasi.upload-foto');
         });

@@ -247,8 +247,8 @@ class OlahragaPrestasiController extends Controller
             DB::table('t_prestasi_keolahragaan_kejuaraan')->insert([
                 "prestasi_keolahragaan_id" => $request->keolahragaan_id,
                 "nama_prestasi" => $request->prestasi,
-                "kategori" => $request->kategori_code,
-                "peraihan_medali" => $request->peraihan_medali_code,
+                "kategori" => $request->kategori,
+                "peraihan_medali" => $request->peraihan_medali,
                 "tahun" => $request->tahun,
                 "created_at" => date('Y-m-d H:i:s'),
                 "created_by" => Auth::user()->name,
@@ -257,7 +257,7 @@ class OlahragaPrestasiController extends Controller
             DB::table('t_prestasi_keolahragaan_lisensi')->insert([
                 "prestasi_keolahragaan_id" => $request->keolahragaan_id,
                 "lisensi" => $request->lisensi,
-                "kategori" => $request->kategori_code,
+                "kategori" => $request->kategori,
                 "tahun" => $request->tahun,
                 "created_at" => date('Y-m-d H:i:s'),
                 "created_by" => Auth::user()->name,
@@ -323,5 +323,76 @@ class OlahragaPrestasiController extends Controller
             ->orderBy('prestasiKeolahragaan.created_at', 'DESC')->get();
 
         return Excel::download(new OlahragaPrestasiExport($data), 'Laporan Prestasi Keolahragaan.xlsx');
+    }
+
+    public function getPrestasiById(Request $request) {
+        $data = DB::table('t_prestasi_keolahragaan_kejuaraan as prestasi')
+                ->select(
+                    'prestasi.id',
+                    'prestasi.nama_prestasi',
+                    'prestasi.kategori as kategori_id',
+                    DB::raw("
+                        CASE
+                            WHEN prestasi.kategori = '1' THEN 'DAERAH'
+                            WHEN prestasi.kategori = '2' THEN 'NASIONAL'
+                            ELSE 'INTERNASIONAL'
+                        END AS kategori_name"
+                    ),
+                    'prestasi.peraihan_medali as peraihan_medali_id',
+                    DB::raw("
+                        CASE
+                            WHEN prestasi.peraihan_medali = '1' THEN 'EMAS'
+                            WHEN prestasi.peraihan_medali = '2' THEN 'PERAK'
+                            ELSE 'PERUNGGU'
+                        END AS peraihan_medali_name"
+                    ),
+                    'prestasi.tahun'
+                )
+                ->where('prestasi.id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function getLisensiById(Request $request) {
+        $data = DB::table('t_prestasi_keolahragaan_lisensi as lisensi')
+                ->select(
+                    'lisensi.id',
+                    'lisensi.lisensi as nama_lisensi',
+                    'lisensi.kategori as kategori_id',
+                    DB::raw("
+                        CASE
+                            WHEN lisensi.kategori = '1' THEN 'DAERAH'
+                            WHEN lisensi.kategori = '2' THEN 'NASIONAL'
+                            ELSE 'INTERNASIONAL'
+                        END AS kategori_name"
+                    ),
+                    'lisensi.tahun'
+                )
+                ->where('lisensi.id', $request->id)->first();
+
+        return response()->json([
+            "data" => $data
+        ], 200);
+    }
+
+    public function updatePrestasi(Request $request) {
+        DB::table('t_prestasi_keolahragaan_kejuaraan')->where('id', $request->id)->update([
+            "nama_prestasi" => $request->nama_prestasi,
+            "kategori" => $request->kategori,
+            "peraihan_medali" => $request->peraihan_medali,
+            "tahun" => $request->tahun,
+        ]);
+        return redirect()->back();
+    }
+
+    public function updateLisensi(Request $request) {
+        DB::table('t_prestasi_keolahragaan_lisensi')->where('id', $request->id)->update([
+            "lisensi" => $request->nama_lisensi,
+            "kategori" => $request->kategori,
+            "tahun" => $request->tahun,
+        ]);
+        return redirect()->back();
     }
 }

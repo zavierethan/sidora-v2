@@ -75,7 +75,7 @@
                         <th class="whitespace-nowrap">Longitude</th>
                         <th class="whitespace-nowrap">Alamat</th>
                         <th class="whitespace-nowrap">Tahun</th>
-                        <th class="whitespace-nowrap text-center">Foto Lokasi</th>
+                        <!-- <th class="whitespace-nowrap text-center">Foto Lokasi</th> -->
                         <th class="whitespace-nowrap text-center">Action</th>
                     </tr>
                 </thead>
@@ -817,10 +817,6 @@ $(function() {
                 {
                     data: 'alamat',
                     name: 'alamat',
-                },
-                {
-                    data: 'ukuran',
-                    name: 'ukuran',
                 },
                 {
                     data: 'tahun',

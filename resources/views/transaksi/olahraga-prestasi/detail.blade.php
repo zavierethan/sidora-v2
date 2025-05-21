@@ -109,13 +109,13 @@
                     </thead>
                     <tbody id="lisensi-table-body">
                         @foreach($lisensi as $item)
-                        <tr>
+                        <tr data-id="{{$item->id}}">
                             <td>{{$item->lisensi}}</td>
                             <td>{{$item->kategori}}</td>
                             <td>{{$item->tahun}}</td>
                             <td class="table-report__action">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href=""> <i
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-lisensi" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-lisensi"> <i
                                             data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.delete', ['keolahragaanId' => $prestasiKeolahragaan->id, 'id' => $item->id])}}" onclick="return confirm('Apakah anda yakin ?')"> <i
                                             data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -152,14 +152,14 @@
                     </thead>
                     <tbody id="prestasi-table-body">
                         @foreach($prestasi as $item)
-                        <tr>
+                        <tr data-id="{{$item->id}}">
                             <td>{{$item->nama_prestasi}}</td>
                             <td>{{$item->kategori}}</td>
                             <td>{{$item->peraihan_medali}}</td>
                             <td>{{$item->tahun}}</td>
                             <td class="table-report__action">
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center text-primary whitespace-nowrap mr-5" href=""> <i
+                                    <a class="flex items-center text-primary whitespace-nowrap mr-5 edit-prestasi" href="javascript:;" data-tw-toggle="modal" data-tw-target="#form-edit-prestasi"> <i
                                             data-lucide="edit" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger whitespace-nowrap mr-5" href="{{route('transaksi.olahraga-prestasi.delete', ['keolahragaanId' => $prestasiKeolahragaan->id, 'id' => $item->id])}}" onclick="return confirm('Apakah anda yakin ?')"> <i
                                             data-lucide="trash" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -174,6 +174,7 @@
     </div>
     @endif
 
+    <!-- Form ADD -->
     <!-- BEGIN: Delete Confirmation Modal -->
     <div id="form-lisensi" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -278,6 +279,110 @@
         </div>
     </div>
     <!-- END: Delete Confirmation Modal -->
+
+    <!-- Form EDIT -->
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="form-edit-lisensi" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- BEGIN: Horizontal Form -->
+                    <div class="intro-y box">
+                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                            <h2 class="font-medium text-base mr-auto">
+                                Edit Lisensi
+                            </h2>
+                        </div>
+                        <form action="{{route('transaksi.olahraga-prestasi.detail.update-lisensi')}}" method="POST" id="horizontal-form" class="p-5">
+                            @csrf
+                            <div class="preview">
+                                <div class="form-inline">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Lisensi</label>
+                                    <input type="text" class="form-control" name="nama_lisensi" id="nama-lisensi">
+                                    <input type="hidden" class="form-control" name="id" id="id">
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Kategori</label>
+                                    <select data-placeholder="Pilih Kategori" class="tom-select w-full form-control" id="kategori" name="kategori" required>
+                                        <option value=" "> - </option>
+                                        <option value="1">Daerah</option>
+                                        <option value="2">Nasional</option>
+                                        <option value="3">Internasional</option>
+                                    </select>
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Tahun</label>
+                                    <input type="number" class="form-control" name="tahun" id="tahun">
+                                </div>
+                            </div>
+                            <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button class="btn py-3 btn-primary w-full md:w-52">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- END: Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
+
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="form-edit-prestasi" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- BEGIN: Horizontal Form -->
+                    <div class="intro-y box">
+                        <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                            <h2 class="font-medium text-base mr-auto">
+                                Edit Prestasi
+                            </h2>
+                        </div>
+                        <form action="{{route('transaksi.olahraga-prestasi.detail.update-prestasi')}}" method="POST" id="horizontal-form" class="p-5">
+                            @csrf
+                            <div class="preview">
+                                <div class="form-inline">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Prestasi</label>
+                                    <input type="text" class="form-control" name="nama_prestasi" id="nama-prestasi">
+                                    <input type="hidden" class="form-control" name="id" id="id">
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Kategori</label>
+                                    <select data-placeholder="Pilih Kategori" class="tom-select w-full form-control" id="kategori" name="kategori" required>
+                                        <option value=" "> - </option>
+                                        <option value="1">Daerah</option>
+                                        <option value="2">Nasional</option>
+                                        <option value="3">Internasional</option>
+                                    </select>
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Peraihan Medali</label>
+                                    <select data-placeholder="Pilih Kategori" class="tom-select w-full form-control" id="peraihan-medali" name="peraihan_medali" required>
+                                        <option value=" "> - </option>
+                                        <option value="1">Emas</option>
+                                        <option value="2">Perak</option>
+                                        <option value="3">Perunggu</option>
+                                    </select>
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Tahun</label>
+                                    <input type="number" class="form-control" name="tahun" id="tahun">
+                                </div>
+                            </div>
+                            <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                                <button type="button" data-tw-dismiss="modal" class="btn btn-danger py-3 border-slate-300 dark:border-darkmode-400 w-full md:w-52">Batal</button>
+                                <button class="btn py-3 btn-primary w-full md:w-52">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- END: Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
 </div>
 @endsection
 
@@ -353,6 +458,101 @@ $(document).ready(function() {
             reader.readAsDataURL(file);
         }
     });
+
+    $(document).on("click", ".edit-lisensi", function() {
+        var row = $(this).closest('tr');
+        var rowId = row.attr('data-id');
+
+        getLisensiRowById(rowId);
+    });
+
+    $(document).on("click", ".edit-prestasi", function() {
+        var row = $(this).closest('tr');
+        var rowId = row.attr('data-id');
+
+        getPrestasiRowById(rowId)
+    });
+
+    function getPrestasiRowById(id) {
+
+        console.log(id)
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '{{route("transaksi.olahraga-prestasi.get-prestasi")}}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function(response) {
+
+                var data = response.data;
+
+                console.log(data)
+
+                $("#form-edit-prestasi #id").val(data.id);
+                $("#form-edit-prestasi #nama-prestasi").val(data.nama_prestasi);
+
+                const kategori = $("#form-edit-prestasi #kategori")[0].tomselect;
+                kategori.setValue(data.kategori_id);
+
+                const peraihanMedali = $("#form-edit-prestasi #peraihan-medali")[0].tomselect;
+                peraihanMedali.setValue(data.peraihan_medali_id);
+
+                $("#form-edit-prestasi #tahun").val(data.tahun);
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
+    function getLisensiRowById(id) {
+
+        console.log(id)
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '{{route("transaksi.olahraga-prestasi.get-lisensi")}}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function(response) {
+
+                var data = response.data;
+
+                console.log(data)
+
+                $("#form-edit-lisensi #id").val(data.id);
+                $("#form-edit-lisensi #nama-lisensi").val(data.nama_lisensi);
+
+                const kategori = $("#form-edit-lisensi #kategori")[0].tomselect;
+                kategori.setValue(data.kategori_id);
+
+                $("#form-edit-lisensi #tahun").val(data.tahun);
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
 });
 </script>
 @endsection
