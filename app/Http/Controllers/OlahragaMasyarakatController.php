@@ -257,7 +257,7 @@ class OlahragaMasyarakatController extends Controller
             DB::table('t_prestasi_keolahragaan_lisensi')->insert([
                 "prestasi_keolahragaan_id" => $request->keolahragaan_id,
                 "lisensi" => $request->lisensi,
-                "kategori" => $request->kategori_code,
+                "kategori" => $request->kategori,
                 "tahun" => $request->tahun,
                 "created_at" => date('Y-m-d H:i:s'),
                 "created_by" => Auth::user()->name,
