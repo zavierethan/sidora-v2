@@ -135,6 +135,7 @@
                         <th class="whitespace-nowrap">Terverifikasi</th>
                         <th class="whitespace-nowrap">Nomor SK</th>
                         <th class="whitespace-nowrap">Alamat Sekretariat</th>
+                        <th class="whitespace-nowrap">Tahun</th>
                         <th class="whitespace-nowrap text-center">Action</th>
                     </tr>
                 </thead>
@@ -438,6 +439,11 @@
                                     <textarea type="text" class="form-control" name="alamat_sekretariat"
                                         id="alamat-sekretariat"></textarea>
                                 </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Tahun</label>
+                                    <input type="number" class="form-control" name="tahun"
+                                        id="tahun"></input>
+                                </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
                                 <button type="button" data-tw-dismiss="modal"
@@ -695,6 +701,10 @@
                                     <textarea type="text" class="form-control alamat_sekretariat"
                                         name="alamat_sekretariat"></textarea>
                                 </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Tahun</label>
+                                    <input type="number" class="form-control tahun" name="tahun"/>
+                                </div>
                             </div>
                             <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
                                 <button type="button" data-tw-dismiss="modal"
@@ -729,7 +739,7 @@ $(function() {
 
         getSarana(desaKelId, tahun);
         getPrasarana(desaKelId, tahun);
-        // getKegiatanOlahraga(desaKelId, tahun);
+        getKegiatanOlahraga(desaKelId, tahun);
     });
 
     $(".view-img").click(function() {
@@ -926,6 +936,11 @@ $(function() {
     }
 
     function getKegiatanOlahraga(id, tahun) {
+
+        if ($.fn.DataTable.isDataTable('#data-kegiatan-olahraga')) {
+            $('#data-kegiatan-olahraga').DataTable().destroy();
+        }
+
         $("#data-kegiatan-olahraga").DataTable({
             processing: true,
             serverSide: true,
@@ -971,6 +986,10 @@ $(function() {
                 {
                     data: 'alamat_sekretariat',
                     name: 'alamat_sekretariat',
+                },
+                {
+                    data: 'tahun',
+                    name: 'tahun',
                 },
                 {
                     data: null, // No direct field from the server
@@ -1168,6 +1187,7 @@ $(function() {
 
                 $("#form-edit-kegiatan-olahraga .nomor_sk").val(data.nomor_sk);
                 $("#form-edit-kegiatan-olahraga .alamat_sekretariat").val(data.alamat_sekretariat);
+                $("#form-edit-kegiatan-olahraga .tahun").val(data.tahun);
 
 
             },

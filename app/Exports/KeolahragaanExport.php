@@ -34,6 +34,7 @@ class KeolahragaanExport implements WithMultipleSheets
             new InformasiWilayahSheet($this->informasiWilayah),
             new SaranaSheet($this->sarana),
             new PrasaranaSheet($this->prasarana),
+            new KegiatanOlahragaSheet($this->kegiatanOlahraga),
             new OlahragaPrestasiSheet($this->olahragaPrestasi),
         ];
     }

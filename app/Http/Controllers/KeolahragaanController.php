@@ -401,6 +401,7 @@ class KeolahragaanController extends Controller
                         ),
                         'tKegiatanOlahraga.nomor_sk',
                         'tKegiatanOlahraga.alamat_sekretariat',
+                        'tKegiatanOlahraga.tahun'
                     )
                     ->join('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
                     ->where('tKegiatanOlahraga.desa_kel_id', $id)
@@ -662,9 +663,14 @@ class KeolahragaanController extends Controller
                     ),
                     'tKegiatanOlahraga.nomor_sk',
                     'tKegiatanOlahraga.alamat_sekretariat',
+                    'tKegiatanOlahraga.tahun'
                 )
                 ->leftJoin('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
                 ->where('tKegiatanOlahraga.desa_kel_id', $params['desa_kelurahan']);
+
+        if (!empty($params['tahun'])) {
+            $query->where('tKegiatanOlahraga.tahun', $params['tahun']);
+        }
 
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);

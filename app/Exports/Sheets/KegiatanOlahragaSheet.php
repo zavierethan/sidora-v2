@@ -35,7 +35,8 @@ class KegiatanOlahragaSheet implements FromCollection, WithTitle, WithHeadings, 
             'Jumlah Anggota',
             'Terverifikasi',
             'Nomor SK',
-            'Alamat Sekretariat'
+            'Alamat Sekretariat',
+            'Tahun'
         ];
     }
 
