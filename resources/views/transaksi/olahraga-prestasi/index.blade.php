@@ -261,9 +261,16 @@ $(document).ready(function() {
             url: `/transaksi/olahraga-prestasi/get-lists`,
             type: 'GET',
             data: function(d) {
-                d.custom_search = $('[data-table-filter="search"]').val();
-                d.kecamatan = $('#f-kecamatan').val();
-                d.desa_kelurahan = $('#f-desa-kelurahan').val();
+                d.custom_search = $('[data-table-filter="search"]').val() || '';
+                const kecamatan = $('#f-kecamatan').val();
+                const desaKelurahan = $('#f-desa-kelurahan').val();
+
+                if (kecamatan && kecamatan.trim() !== '') {
+                    d.kecamatan = kecamatan;
+                }
+                if (desaKelurahan && desaKelurahan.trim() !== '') {
+                    d.desa_kelurahan = desaKelurahan;
+                }
             },
             dataSrc: function(json) {
                 console.log("RESPON JSON:", json);
