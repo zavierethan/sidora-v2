@@ -42,10 +42,9 @@ class OlahragaPrestasiController extends Controller
 
     public function getLists(Request $request) {
         $params = $request->all();
-
         $search = $request->input('custom_search');
 
-        $query = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
+        $baseQuery = DB::table('t_prestasi_keolahragaan as prestasiKeolahragaan')
             ->select(
                 'prestasiKeolahragaan.id',
                 'prestasiKeolahragaan.nama',
@@ -56,52 +55,58 @@ class OlahragaPrestasiController extends Controller
                 'desakelurahan.nama as nama_desa_kelurahan',
                 'kecamatan.nama as nama_kecamatan',
                 'prestasiKeolahragaan.organisasi_pembina',
-                'desakelurahan.nama as nama_desa_kelurahan',
                 'cabangOlahraga.nama as nama_cabang_olahraga',
                 DB::raw("
                     CASE
                         WHEN prestasiKeolahragaan.kategori = '1' THEN 'ATLET'
                         WHEN prestasiKeolahragaan.kategori = '2' THEN 'PELATIH'
                         ELSE 'WASIT - JURI'
-                    END AS str_kategori"
-                ),
+                    END AS str_kategori
+                "),
             )
             ->join('m_desa_kelurahan as desakelurahan', 'desakelurahan.id', '=', 'prestasiKeolahragaan.desa_kelurahan_id')
             ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'desakelurahan.kecamatan_id')
             ->join('m_cabang_olahraga as cabangOlahraga', 'cabangOlahraga.id', '=', 'prestasiKeolahragaan.cabang_olahraga_id')
-            ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KONI', 'NPCI'])
-            ->orderBy('prestasiKeolahragaan.created_at', 'DESC');
+            ->whereIn('prestasiKeolahragaan.organisasi_pembina', ['KONI', 'NPCI']);
 
+        // Clone for total count without filters
+        $totalRecords = (clone $baseQuery)->count();
+
+        // Apply filters if any
         if (!empty($search)) {
-            $query->where(function($query) use ($search) {
+            $baseQuery->where(function($query) use ($search) {
                 $query->where('prestasiKeolahragaan.nama', 'like', "%$search%")
-                        ->orWhere('cabangOlahraga.nama', 'like', "%$search%");
+                    ->orWhere('cabangOlahraga.nama', 'like', "%$search%");
             });
         }
 
         if (!empty($params['kecamatan'])) {
-            $query->where('desakelurahan.kecamatan_id', $params['kecamatan']);
+            $baseQuery->where('desakelurahan.kecamatan_id', $params['kecamatan']);
         }
 
         if (!empty($params['desa_kelurahan'])) {
-            $query->where('prestasiKeolahragaan.desa_kelurahan_id', $params['desa_kelurahan']);
+            $baseQuery->where('prestasiKeolahragaan.desa_kelurahan_id', $params['desa_kelurahan']);
         }
+
+        // Filtered count
+        $filteredRecords = (clone $baseQuery)->count();
 
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);
 
-        $totalRecords = $query->count();
-        $filteredRecords = $query->count();
-        $data = $query->orderBy('prestasiKeolahragaan.created_at', 'asc')->skip($start)->take($length)->get();
+        // Get data with pagination and ordering
+        $data = $baseQuery
+            ->orderBy('prestasiKeolahragaan.created_at', 'DESC')
+            ->skip($start)
+            ->take($length)
+            ->get();
 
-        $response = [
-            'draw' => $request->input('draw'),
+        return response()->json([
+            'draw' => intval($request->input('draw')),
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
             'data' => $data
-        ];
-
-        return response()->json($response);
+        ]);
     }
 
     public function create() {
