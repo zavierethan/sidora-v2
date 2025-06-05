@@ -266,7 +266,12 @@ $(document).ready(function() {
                 d.desa_kelurahan = $('#f-desa-kelurahan').val();
             },
             dataSrc: function(json) {
+                console.log("RESPON JSON:", json);
                 return json.data;
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX ERROR:", error);
+                console.log("XHR RESPONSE:", xhr.responseText);
             }
         },
         columns: [{
