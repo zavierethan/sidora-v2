@@ -259,18 +259,14 @@ $(document).ready(function() {
         pageLength: 10,
         ajax: {
             url: `/transaksi/olahraga-prestasi/get-lists`,
-            type: 'GET',
+            type: 'POST', // 🔁 Changed from 'GET' to 'POST'
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // ✅ Laravel CSRF support
+            },
             data: function(d) {
-                d.custom_search = $('[data-table-filter="search"]').val() || '';
-                const kecamatan = $('#f-kecamatan').val();
-                const desaKelurahan = $('#f-desa-kelurahan').val();
-
-                if (kecamatan && kecamatan.trim() !== '') {
-                    d.kecamatan = kecamatan;
-                }
-                if (desaKelurahan && desaKelurahan.trim() !== '') {
-                    d.desa_kelurahan = desaKelurahan;
-                }
+                d.custom_search = $('[data-table-filter="search"]').val()?.trim() || null;
+                d.kecamatan = $('#f-kecamatan').val()?.trim() || null;
+                d.desa_kelurahan = $('#f-desa-kelurahan').val()?.trim() || null;
             },
             dataSrc: function(json) {
                 console.log("RESPON JSON:", json);

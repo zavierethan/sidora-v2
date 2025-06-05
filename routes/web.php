@@ -152,7 +152,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::prefix('olahraga-prestasi')->group(function () {
             Route::get('/', [App\Http\Controllers\OlahragaPrestasiController::class, 'index'])->name('transaksi.olahraga-prestasi.index');
-            Route::get('/get-lists', [App\Http\Controllers\OlahragaPrestasiController::class, 'getLists'])->name('transaksi.olahraga-prestasi.get-lists');
+            Route::match(['get', 'post'], '/get-lists', [App\Http\Controllers\OlahragaPrestasiController::class, 'getLists'])->name('transaksi.olahraga-prestasi.get-lists');
             Route::post('/save', [App\Http\Controllers\OlahragaPrestasiController::class, 'save'])->name('transaksi.olahraga-prestasi.save');
             Route::get('/create', [App\Http\Controllers\OlahragaPrestasiController::class, 'create'])->name('transaksi.olahraga-prestasi.create');
             Route::get('/detail/{id}', [App\Http\Controllers\OlahragaPrestasiController::class, 'detail'])->name('transaksi.olahraga-prestasi.detail');
