@@ -23,6 +23,8 @@
                 </select>
                 <input type="text" data-table-filter="search" class="form-control form-control-solid w-xl mr-2 ps-15"
                     placeholder="Cari" />
+                <a href="/transaksi/keolahragaan/exportByKecamatan/1"
+                    class="btn btn-success w-24 ml-2 text-white">Export</a>
             </div>
             <div class="hidden xl:block mx-auto text-slate-500"></div>
             <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
