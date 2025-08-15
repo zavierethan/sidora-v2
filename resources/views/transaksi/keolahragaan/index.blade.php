@@ -23,7 +23,7 @@
                 </select>
                 <input type="text" data-table-filter="search" class="form-control form-control-solid w-xl mr-2 ps-15"
                     placeholder="Cari" />
-                <a href="/transaksi/keolahragaan/exportByKecamatan/1"
+                <a href="#" id="btn-export"
                     class="btn btn-success w-24 ml-2 text-white">Export</a>
             </div>
             <div class="hidden xl:block mx-auto text-slate-500"></div>
@@ -239,6 +239,20 @@ $(document).ready(function() {
 
     $('#f-kecamatan, #f-desa-kelurahan').on('change', function () {
         table.ajax.reload(); // Trigger DataTable redraw with updated filter values
+    });
+
+    $('#btn-export').on('click', function (e) {
+        e.preventDefault(); // stop default link behavior
+
+        let kecId = $('#f-kecamatan').val();
+
+        if (!kecId || $.trim(kecId) === "") {
+            alert("Pilih kecamatan terlebih dahulu!");
+            return;
+        }
+
+        // Redirect to dynamic URL
+        window.location.href = '/transaksi/keolahragaan/exportByKecamatan/' + kecId;
     });
 });
 </script>
