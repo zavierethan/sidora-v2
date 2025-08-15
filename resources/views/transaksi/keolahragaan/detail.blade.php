@@ -783,10 +783,11 @@ $(function() {
             pageLength: 10, // Number of rows per page
             ajax: {
                 url: `/transaksi/keolahragaan/sarana/get-lists`, // Replace with your route
-                type: 'GET',
+                type: 'POST',
                 data: function(d) {
                     d.desa_kelurahan = id;
                     d.tahun = tahun;
+                    d._token = '{{ csrf_token() }}';
                 },
                 dataSrc: function(json) {
                     return json.data; // Map the 'data' field
