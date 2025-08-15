@@ -536,7 +536,7 @@ class KeolahragaanController extends Controller
                 $kegiatanOlahraga,
                 $olahragaPrestasi
             ),
-            'Laporan.xlsx'
+            $informasiWilayah[0]->nama_kecamatan.'.xlsx'
         );
     }
 
