@@ -127,8 +127,8 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('/export/{id}', [App\Http\Controllers\KeolahragaanController::class, 'export'])->name('transaksi.keolahragaan.export');
 
             Route::post('/sarana/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'saranaGetLists'])->name('transaksi.keolahragaan.sarana.get-lists');
-            Route::get('/prasarana/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'prasaranaGetLists'])->name('transaksi.keolahragaan.prasarana.get-lists');
-            Route::get('/kegiatan-olahraga/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'kegiatanOlahragaGetLists'])->name('transaksi.keolahragaan.kegiatan-olahraga.get-lists');
+            Route::post('/prasarana/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'prasaranaGetLists'])->name('transaksi.keolahragaan.prasarana.get-lists');
+            Route::post('/kegiatan-olahraga/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'kegiatanOlahragaGetLists'])->name('transaksi.keolahragaan.kegiatan-olahraga.get-lists');
 
             Route::post('/sarana/save', [App\Http\Controllers\KeolahragaanController::class, 'saveSarana'])->name('transaksi.keolahragaan.sarana.save');
             Route::post('/prasarana/save', [App\Http\Controllers\KeolahragaanController::class, 'savePrasarana'])->name('transaksi.keolahragaan.prasarana.save');
