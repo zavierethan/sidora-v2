@@ -25,13 +25,13 @@
                         <label for="vertical-form-1" class="sm:w-40 font-bold">Tahun</label>
                         <?php
                             $current_year = date('Y');
-                            $years_range = range($current_year + 5, $current_year - 5);
+                            $years_range = range($current_year, $current_year - 5);
                         ?>
                         <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="tahun"
                             name="tahun" required>
                             <option value=" ">All</option>
                             @foreach($years_range as $year)
-                            <option value="{{ $year }}">{{ $year }}</option>
+                            <option value="{{ $year }}" <?php echo ($current_year == $year) ? 'selected' : ''; ?>>{{ $year }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -42,13 +42,13 @@
                     <div class="form-inline">
                         <label class="sm:w-40 font-bold">Desa / Kelurahan</label>
                         <input type="text" class="form-control" value="{{ $wilayah->nama_desa_kelurahan }}" readonly>
+                        <input type="hidden" class="form-control" value="{{ $wilayah->id }}" id="wilayahId" readonly>
                     </div>
                 </div>
             </div>
             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                 <a href="{{route('transaksi.keolahragaan.index')}}" class="btn btn-danger w-24 ml-2">Kembali</a>
-                <a href="/transaksi/keolahragaan/export/{{$wilayah->id}}"
-                    class="btn btn-success w-24 ml-2 text-white">Export</a>
+                <a href="#" class="btn btn-success w-24 ml-2 text-white" id="exportBtn">Export</a>
             </div>
         </div>
     </div>
@@ -766,6 +766,17 @@ $(function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
         getKegiatanRowById(row_id);
+    });
+
+    $('#exportBtn').on('click', function (e) {
+        e.preventDefault();
+
+        let tahun = $('#tahun').val();
+        let wilayahId = $('#wilayahId').val();
+
+        let url = "/transaksi/keolahragaan/export/" + wilayahId + "/" +tahun;
+
+        window.location.href = url;
     });
 
     function getSarana(id, tahun) {

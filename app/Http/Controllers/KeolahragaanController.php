@@ -35,27 +35,41 @@ class KeolahragaanController extends Controller
 
     public function getLists(Request $request) {
         $params = $request->all();
-
         $search = $request->input('custom_search');
 
         $query = DB::table('m_desa_kelurahan AS dk')
-            ->select('dk.id', 'dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
-            ->selectSub(function ($query) {
-                $query->selectRaw('COUNT(id)')
+            ->select(
+                'dk.id',
+                'dk.nama AS nama_desa_kelurahan',
+                'kecamatan.nama as nama_kecamatan',
+            )
+            ->selectSub(function ($sub) use ($params) {
+                $sub->selectRaw('COUNT(id)')
                     ->from('t_sarana')
                     ->whereColumn('desa_kel_id', 'dk.id');
+
+                // filter tahun kalau ada
+                if (!empty($params['tahun'])) {
+                    $sub->where('tahun', $params['tahun']);
+                }
             }, 'jumlah_sarana')
-            ->selectSub(function ($query) {
-                $query->selectRaw('COUNT(id)')
+            ->selectSub(function ($sub) use ($params) {
+                $sub->selectRaw('COUNT(id)')
                     ->from('t_kegiatan_olahraga')
                     ->whereColumn('desa_kel_id', 'dk.id');
+
+                // filter tahun kalau ada
+                if (!empty($params['tahun'])) {
+                    $sub->where('tahun', $params['tahun']);
+                }
             }, 'jumlah_kegiatan_olahraga')
             ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id');
 
+        // filter pencarian
         if (!empty($search)) {
-            $query->where(function($query) use ($search) {
-                $query->where('kecamatan.nama', 'like', "%$search%")
-                        ->orWhere('dk.nama', 'like', "%$search%");
+            $query->where(function($q) use ($search) {
+                $q->where('kecamatan.nama', 'like', "%$search%")
+                ->orWhere('dk.nama', 'like', "%$search%");
             });
         }
 
@@ -67,22 +81,31 @@ class KeolahragaanController extends Controller
             $query->where('dk.id', $params['desa_kelurahan']);
         }
 
+        $user = Auth::user();
+
+        if($user->role_id == 5 && !is_null($user->kecamatan_id)) {
+            $query->where('dk.kecamatan_id', $user->kecamatan_id);
+        }
+
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);
 
         $totalRecords = $query->count();
         $filteredRecords = $query->count();
-        $data = $query->orderBy('kecamatan.nama', 'asc')->orderBy('dk.nama', 'asc')->skip($start)->take($length)->get();
+        $data = $query->orderBy('kecamatan.nama', 'asc')
+                    ->orderBy('dk.nama', 'asc')
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
 
-        $response = [
+        return response()->json([
             'draw' => $request->input('draw'),
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
             'data' => $data
-        ];
-
-        return response()->json($response);
+        ]);
     }
+
 
     public function create(Request $request) {
 
@@ -318,21 +341,25 @@ class KeolahragaanController extends Controller
                 ->where('tKegiatanOlahraga.desa_kel_id', $id)
                 ->get();
 
-        return view('transaksi.keolahragaan.detail', compact('wilayah', 'tSarana', 'tPrasarana', 'tKegiatanOlahraga', 'infrastruktur', 'mPrasarana', 'cabangOlahraga'));
+        return view('transaksi.keolahragaan.detail',
+            compact('wilayah',
+            'tSarana', 'tPrasarana', 'tKegiatanOlahraga', 'infrastruktur', 'mPrasarana', 'cabangOlahraga'));
     }
 
-    public function export($id) {
+    public function export($id, $tahun) {
         $informasiWilayah = DB::table('m_desa_kelurahan AS dk')
                     ->select('dk.nama AS nama_desa_kelurahan','kecamatan.nama as nama_kecamatan',)
-                    ->selectSub(function ($query) {
+                    ->selectSub(function ($query) use ($tahun) {
                         $query->selectRaw('COUNT(id)')
                             ->from('t_sarana')
-                            ->whereColumn('desa_kel_id', 'dk.id');
+                            ->whereColumn('desa_kel_id', 'dk.id')
+                            ->where('t_sarana.tahun', $tahun);
                     }, 'jumlah_sarana')
-                    ->selectSub(function ($query) {
+                    ->selectSub(function ($query) use ($tahun) {
                         $query->selectRaw('COUNT(id)')
                             ->from('t_kegiatan_olahraga')
-                            ->whereColumn('desa_kel_id', 'dk.id');
+                            ->whereColumn('desa_kel_id', 'dk.id')
+                            ->where('t_kegiatan_olahraga.tahun', $tahun);
                     }, 'jumlah_kegiatan_olahraga')
                     ->join('m_kecamatan as kecamatan', 'kecamatan.id', '=', 'dk.kecamatan_id')
                     ->where('dk.id', $id)
@@ -364,6 +391,7 @@ class KeolahragaanController extends Controller
                         'tSarana.tahun',
                     )
                     ->join('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
+                    ->where('tSarana.tahun', $tahun)
                     ->where('tSarana.desa_kel_id', $id)
                     ->get();
 
@@ -385,6 +413,7 @@ class KeolahragaanController extends Controller
                         'tPrasarana.tahun'
                     )
                     ->join('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
+                    ->where('tPrasarana.tahun', $tahun)
                     ->where('tPrasarana.desa_kel_id', $id)
                     ->get();
 
@@ -404,6 +433,7 @@ class KeolahragaanController extends Controller
                         'tKegiatanOlahraga.tahun'
                     )
                     ->join('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
+                    ->where('tKegiatanOlahraga.tahun', $tahun)
                     ->where('tKegiatanOlahraga.desa_kel_id', $id)
                     ->get();
 
@@ -430,27 +460,35 @@ class KeolahragaanController extends Controller
                 ->orderBy('prestasiKeolahragaan.nama', 'asc')
                 ->get();
 
-        return Excel::download(new KeolahragaanExport($informasiWilayah, $sarana, $prasarana, $kegiatanOlahraga, $olahragaPrestasi), 'Laporan.xlsx');
+        return Excel::download(
+            new KeolahragaanExport(
+                $informasiWilayah,
+                $sarana, $prasarana,
+                $kegiatanOlahraga,
+                $olahragaPrestasi),
+            $informasiWilayah[0]->nama_desa_kelurahan.' - '.$tahun.'.xlsx');
     }
 
-    public function exportByKecamatan($idKecamatan) {
+    public function exportByKecamatan($idKecamatan, $tahun) {
         // Informasi wilayah berdasarkan kecamatan
         $informasiWilayah = DB::table('m_kecamatan AS kecamatan')
             ->select(
                 'kecamatan.nama AS nama_kecamatan',
                 DB::raw('COUNT(DISTINCT dk.id) AS jumlah_desa_kelurahan')
             )
-            ->selectSub(function ($query) {
+            ->selectSub(function ($query) use ($tahun) {
                 $query->selectRaw('COUNT(*)')
                     ->from('t_sarana')
                     ->join('m_desa_kelurahan as dk2', 'dk2.id', '=', 't_sarana.desa_kel_id')
-                    ->whereColumn('dk2.kecamatan_id', 'kecamatan.id');
+                    ->whereColumn('dk2.kecamatan_id', 'kecamatan.id')
+                    ->where('t_sarana.tahun', $tahun);
             }, 'jumlah_sarana')
-            ->selectSub(function ($query) {
+            ->selectSub(function ($query) use ($tahun) {
                 $query->selectRaw('COUNT(*)')
                     ->from('t_kegiatan_olahraga')
                     ->join('m_desa_kelurahan as dk3', 'dk3.id', '=', 't_kegiatan_olahraga.desa_kel_id')
-                    ->whereColumn('dk3.kecamatan_id', 'kecamatan.id');
+                    ->whereColumn('dk3.kecamatan_id', 'kecamatan.id')
+                    ->where('t_kegiatan_olahraga.tahun', $tahun);
             }, 'jumlah_kegiatan_olahraga')
             ->join('m_desa_kelurahan as dk', 'dk.kecamatan_id', '=', 'kecamatan.id')
             ->where('kecamatan.id', $idKecamatan)
@@ -473,6 +511,7 @@ class KeolahragaanController extends Controller
             )
             ->join('m_sarana as mSarana', 'mSarana.id', '=', 'tSarana.sarana_id')
             ->join('m_desa_kelurahan as dk', 'dk.id', '=', 'tSarana.desa_kel_id')
+            ->where('tSarana.tahun', $tahun)
             ->where('dk.kecamatan_id', $idKecamatan)
             ->get();
 
@@ -488,6 +527,7 @@ class KeolahragaanController extends Controller
             )
             ->join('m_prasarana as mPrasrana', 'mPrasrana.id', '=', 'tPrasarana.prasarana_id')
             ->join('m_desa_kelurahan as dk', 'dk.id', '=', 'tPrasarana.desa_kel_id')
+            ->where('tPrasarana.tahun', $tahun)
             ->where('dk.kecamatan_id', $idKecamatan)
             ->get();
 
@@ -505,6 +545,7 @@ class KeolahragaanController extends Controller
             )
             ->join('m_cabang_olahraga as mCabor', 'mCabor.id', '=', 'tKegiatanOlahraga.cabang_olahraga_id')
             ->join('m_desa_kelurahan as dk', 'dk.id', '=', 'tKegiatanOlahraga.desa_kel_id')
+            ->where('tKegiatanOlahraga.tahun', $tahun)
             ->where('dk.kecamatan_id', $idKecamatan)
             ->get();
 
@@ -536,7 +577,7 @@ class KeolahragaanController extends Controller
                 $kegiatanOlahraga,
                 $olahragaPrestasi
             ),
-            $informasiWilayah[0]->nama_kecamatan.'.xlsx'
+            $informasiWilayah[0]->nama_kecamatan.' - '.$tahun.'.xlsx'
         );
     }
 

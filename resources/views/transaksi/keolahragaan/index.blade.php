@@ -8,23 +8,31 @@
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap xl:flex-nowrap items-center mt-2">
             <div class="flex w-full sm:w-auto">
-                <select class="form-select w-xl mr-2" id="f-kecamatan">
+                @php
+                    $user = Auth::user();
+                @endphp
+                <select class="form-select w-xl mr-2" id="f-kecamatan" @if($user->role_id == 5) disabled @endif>
                     <option value=" ">Kecamatan</option>
                     @foreach($kecamatan as $kec)
-                    <option value="{{$kec->id}}">{{$kec->nama}}</option>
+                    <option value="{{$kec->id}}" @if($user->kecamatan_id == $kec->id) selected @endif>
+                        {{$kec->nama}}
+                    </option>
                     @endforeach
                 </select>
-                <!-- Dropdown Filter -->
-                <select class="form-select w-xl mr-2" id="f-desa-kelurahan">
-                    <option value=" ">Desa / Kelurahan</option>
-                    @foreach($desaKelurahan as $deskel)
-                    <option value="{{$deskel->id}}">{{$deskel->desa_kelurahan}}</option>
+                <?php
+                    $current_year = date('Y');
+                    $years_range = range($current_year, $current_year - 5);
+                ?>
+                <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="f-tahun" name="tahun"
+                    required>
+                    <option value=" ">All</option>
+                    @foreach($years_range as $year)
+                    <option value="{{ $year }}" <?php echo ($current_year == $year) ? 'selected' : ''; ?>>{{ $year }}</option>
                     @endforeach
                 </select>
-                <input type="text" data-table-filter="search" class="form-control form-control-solid w-xl mr-2 ps-15"
-                    placeholder="Cari" />
-                <a href="#" id="btn-export"
-                    class="btn btn-success w-24 ml-2 text-white">Export</a>
+                <!-- <input type="text" data-table-filter="search" class="form-control form-control-solid w-xl mr-2 ps-15"
+                    placeholder="Cari" /> -->
+                <a href="#" id="btn-export" class="btn btn-success w-24 ml-2 text-white">Export</a>
             </div>
             <div class="hidden xl:block mx-auto text-slate-500"></div>
             <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
@@ -145,7 +153,7 @@ $(function() {
     });
 });
 
-$('#f-kecamatan').change(function () {
+$('#f-kecamatan').change(function() {
     const kecamatanId = $(this).val();
 
     // 🧹 Clear Desa/Kelurahan select box lebih dulu
@@ -155,16 +163,16 @@ $('#f-kecamatan').change(function () {
         $.ajax({
             url: `/master/desa-kelurahan/by-kecamatan/${kecamatanId}`,
             type: 'GET',
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     let options = `<option value="">Desa / Kelurahan</option>`;
-                    response.data.forEach(function (item) {
+                    response.data.forEach(function(item) {
                         options += `<option value="${item.id}">${item.nama}</option>`;
                     });
                     $('#f-desa-kelurahan').html(options);
                 }
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
                 console.error('Gagal fetch desa/kelurahan:', error);
             }
         });
@@ -186,6 +194,7 @@ $(document).ready(function() {
                 d.custom_search = $('[data-table-filter="search"]').val();
                 d.kecamatan = $('#f-kecamatan').val();
                 d.desa_kelurahan = $('#f-desa-kelurahan').val();
+                d.tahun = $('#f-tahun').val();
             },
             dataSrc: function(json) {
                 return json.data; // Map the 'data' field
@@ -237,14 +246,15 @@ $(document).ready(function() {
         table.ajax.reload(); // Triggers a new AJAX request with the search term
     });
 
-    $('#f-kecamatan, #f-desa-kelurahan').on('change', function () {
+    $('#f-kecamatan, #f-desa-kelurahan, #f-tahun').on('change', function() {
         table.ajax.reload(); // Trigger DataTable redraw with updated filter values
     });
 
-    $('#btn-export').on('click', function (e) {
+    $('#btn-export').on('click', function(e) {
         e.preventDefault(); // stop default link behavior
 
         let kecId = $('#f-kecamatan').val();
+        let tahun = $('#f-tahun').val();
 
         if (!kecId || $.trim(kecId) === "") {
             alert("Pilih kecamatan terlebih dahulu!");
@@ -252,7 +262,7 @@ $(document).ready(function() {
         }
 
         // Redirect to dynamic URL
-        window.location.href = '/transaksi/keolahragaan/exportByKecamatan/' + kecId;
+        window.location.href = '/transaksi/keolahragaan/exportByKecamatan/' + kecId + '/' + tahun;
     });
 });
 </script>

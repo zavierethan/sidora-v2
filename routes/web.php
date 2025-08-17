@@ -124,8 +124,8 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/save', [App\Http\Controllers\KeolahragaanController::class, 'save'])->name('transaksi.keolahragaan.save');
             Route::get('/detail/{id}', [App\Http\Controllers\KeolahragaanController::class, 'detail'])->name('transaksi.keolahragaan.detail');
             Route::post('/update', [App\Http\Controllers\KeolahragaanController::class, 'update'])->name('transaksi.keolahragaan.update');
-            Route::get('/export/{id}', [App\Http\Controllers\KeolahragaanController::class, 'export'])->name('transaksi.keolahragaan.export');
-            Route::get('/exportByKecamatan/{id}', [App\Http\Controllers\KeolahragaanController::class, 'exportByKecamatan'])->name('transaksi.keolahragaan.export.by.kecamatan');
+            Route::get('/export/{id}/{tahun}', [App\Http\Controllers\KeolahragaanController::class, 'export'])->name('transaksi.keolahragaan.export');
+            Route::get('/exportByKecamatan/{id}/{tahun}', [App\Http\Controllers\KeolahragaanController::class, 'exportByKecamatan'])->name('transaksi.keolahragaan.export.by.kecamatan');
 
             Route::post('/sarana/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'saranaGetLists'])->name('transaksi.keolahragaan.sarana.get-lists');
             Route::post('/prasarana/get-lists', [App\Http\Controllers\KeolahragaanController::class, 'prasaranaGetLists'])->name('transaksi.keolahragaan.prasarana.get-lists');
