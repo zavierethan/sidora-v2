@@ -50,7 +50,8 @@ class RegistrationController extends Controller
             )
             ->leftJoin('m_kecamatan', 'm_kecamatan.id', '=', 't_pendaftaran.kecamatan_id')
             ->leftJoin('m_desa_kelurahan', 'm_desa_kelurahan.id', '=', 't_pendaftaran.desa_kelurahan_id')
-            ->join('m_roles', 'm_roles.id', '=', 't_pendaftaran.jenis_akun');
+            ->join('m_roles', 'm_roles.id', '=', 't_pendaftaran.jenis_akun')
+            ->where('t_pendaftaran.status', 0);
 
         if (!empty($search)) {
             $query->where(function($query) use ($search) {
