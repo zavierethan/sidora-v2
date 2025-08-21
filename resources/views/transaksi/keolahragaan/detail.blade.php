@@ -729,10 +729,11 @@
 $(function() {
 
     var desaKelId = $("#desa-kel-id").val();
+    let tahun = $("#tahun").val();
 
-    getSarana(desaKelId, '');
-    getPrasarana(desaKelId, '');
-    getKegiatanOlahraga(desaKelId, '');
+    getSarana(desaKelId, tahun);
+    getPrasarana(desaKelId, tahun);
+    getKegiatanOlahraga(desaKelId, tahun);
 
     $("#tahun").change(function() {
         let tahun = $(this).val();
