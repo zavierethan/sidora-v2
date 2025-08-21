@@ -25,7 +25,7 @@
                 ?>
                 <select data-placeholder="Pilih Tahun" class="tom-select w-full form-control" id="f-tahun" name="tahun"
                     required>
-                    <option value=" ">All</option>
+                    <option value="" selected>All</option>
                     @foreach($years_range as $year)
                     <option value="{{ $year }}" <?php echo ($current_year == $year) ? 'selected' : ''; ?>>{{ $year }}</option>
                     @endforeach
