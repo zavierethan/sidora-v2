@@ -75,7 +75,7 @@
                         <th class="whitespace-nowrap">Longitude</th>
                         <th class="whitespace-nowrap">Alamat</th>
                         <th class="whitespace-nowrap">Tahun</th>
-                        <!-- <th class="whitespace-nowrap text-center">Foto Lokasi</th> -->
+                        <th class="whitespace-nowrap text-center">Foto Lokasi</th>
                         <th class="whitespace-nowrap text-center">Action</th>
                     </tr>
                 </thead>
@@ -463,8 +463,10 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <!-- BEGIN: Horizontal Form -->
-                    <div class="intro-y box ">
-                        <img id="img-holder" src="" />
+                    <div class="intro-y box flex justify-center items-center">
+                        <img id="img-holder"
+                            src=""
+                            class="max-w-full max-h-[80vh] object-contain rounded-lg" />
                     </div>
                     <!-- END: Horizontal Form -->
                 </div>
@@ -547,6 +549,10 @@
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-2" class="sm:w-40 font-bold">Alamat</label>
                                     <textarea type="text" class="form-control alamat" name="alamat"></textarea>
+                                </div>
+                                <div class="form-inline mt-5">
+                                    <label for="input-wizard-2" class="sm:w-40 font-bold">Tahun</label>
+                                    <input type="number" class="form-control tahun" name="tahun">
                                 </div>
                                 <div class="form-inline mt-5">
                                     <label for="input-wizard-1" class="sm:w-40 font-bold">Foto Lokasi 1</label>
@@ -743,12 +749,6 @@ $(function() {
         getKegiatanOlahraga(desaKelId, tahun);
     });
 
-    $(".view-img").click(function() {
-        var row = $(this).closest('tr');
-        var row_id = row.attr('data-id');
-        getImgRowById(row_id);
-    });
-
     $(document).on("click", ".edit-sarana", function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
@@ -767,6 +767,15 @@ $(function() {
         var row = $(this).closest('tr');
         var row_id = row.attr('data-id');
         getKegiatanRowById(row_id);
+    });
+
+    $(document).on("click", ".view-img", function (e) {
+        e.preventDefault();
+
+        let imgId = $(this).data("img");
+
+        // Load gambar sebelum modal tampil
+        getImgRowById(imgId);
     });
 
     $('#exportBtn').on('click', function (e) {
@@ -844,6 +853,19 @@ $(function() {
                 {
                     data: 'tahun',
                     name: 'tahun',
+                },
+                {
+                    data: null, // No direct field from the server
+                    name: 'action',
+                    orderable: false, // Disable ordering for this column
+                    searchable: false, // Disable searching for this column
+                    render: function(data, type, row) {
+                        return `
+                            <a class="flex items-center text-primary whitespace-nowrap mr-5 view-img"
+                                        href="javascript:;" data-tw-toggle="modal" data-tw-target="#view-image" data-img="${row.id}">
+                                        <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Lihat Foto Lokasi </a>
+                        `;
+                    }
                 },
                 {
                     data: null, // No direct field from the server
@@ -1034,8 +1056,6 @@ $(function() {
 
     function getImgRowById(id) {
 
-        console.log(id)
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1043,9 +1063,9 @@ $(function() {
         });
 
         $.ajax({
-            url: '{{route("transaksi.get.image.by.sarana.id")}}', // Specify the URL of your server endpoint
-            type: 'POST', // or 'POST' depending on your server setup
-            dataType: 'json', // Assuming the response will be
+            url: '{{route("transaksi.get.image.by.sarana.id")}}',
+            type: 'POST',
+            dataType: 'json',
             data: {
                 id: id
             },
@@ -1105,9 +1125,8 @@ $(function() {
                 $("#form-edit-sarana .latitude").val(data.lat);
                 $("#form-edit-sarana .longitude").val(data.long);
                 $("#form-edit-sarana .alamat").val(data.alamat);
+                $("#form-edit-sarana .tahun").val(data.tahun);
                 $("#form-edit-sarana .ex_foto_lokasi_1").val(data.foto_lokasi_1);
-
-
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
