@@ -90,13 +90,23 @@ class UserController extends Controller
     }
 
     public function update(Request $request) {
-        DB::table('m_users')->where('id', $request->id)->update([
+        $user = DB::table('m_users')->where('id', $request->id)->first();
+
+        // prepare base update data
+        $dataUpdate = [
             "nama_lengkap" => $request->nama_lengkap,
-            "no_telepon" => $request->no_telepon,
-            "email" => $request->email,
-            "role_id" => $request->role_id,
-            "status" => $request->status
-        ]);
+            "no_telepon"   => $request->no_telepon,
+            "email"        => $request->email,
+            "role_id"      => $request->role_id,
+            "status"       => $request->status,
+        ];
+
+        // if reset password is requested, set password = bcrypt(username)
+        if ($request->reset_password == 1) {
+            $dataUpdate['password'] = Hash::make($user->name);
+        }
+
+        DB::table('m_users')->where('id', $request->id)->update($dataUpdate);
 
         return redirect()->route('transaksi.pengaturan.user.index');
     }
