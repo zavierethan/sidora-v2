@@ -53,9 +53,25 @@
     <div class="container-fluid sticky-top">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark p-0">
-                <a href="/" class="navbar-brand">
+                <!-- <a href="/" class="navbar-brand">
                     <img alt="SIDORA BEDAS" style="width: 120px;"
                         src="https://sidora.bandungkab.go.id/assets/images/logo_sidora_new.png">
+                </a> -->
+                <a href="/" class="navbar-brand d-flex align-items-center">
+                    <!-- Logo 1 -->
+                    <img 
+                        alt="SIDORA BEDAS" 
+                        src="https://sidora.bandungkab.go.id/assets/images/logo_sidora_new.png"
+                        style="width: 120px;"
+                        class="me-2"
+                    >
+            
+                    <!-- Logo 2 -->
+                    <img 
+                        alt="Logo Kedua"
+                        src="https://sidora.bandungkab.go.id/assets/images/kab-bandung-logo-1.png"
+                        style="width: 50px;"
+                    >
                 </a>
                 <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
